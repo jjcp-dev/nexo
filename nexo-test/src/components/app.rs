@@ -1,3 +1,4 @@
+use nexo::background::Background;
 use nexo::color::Color;
 use nexo::component::Component;
 use nexo::geometry::Geometry;
@@ -54,17 +55,20 @@ impl Component for App {
                     },
                     spacing: Spacing {
                         margin: Margin {
-                            top: Length::Dots(10),
-                            right: Length::Dots(10),
-                            bottom: Length::Dots(10),
-                            left: Length::Dots(10),
-                        },
-                        padding: Padding {
                             top: Length::Dots(0),
                             right: Length::Dots(0),
                             bottom: Length::Dots(0),
                             left: Length::Dots(0),
                         },
+                        padding: Padding {
+                            top: Length::Dots(10),
+                            right: Length::Dots(10),
+                            bottom: Length::Dots(10),
+                            left: Length::Dots(10),
+                        },
+                    },
+                    background: Background {
+                        color: Color::rgb(0, 0, 255),
                     },
                     content: String::from("Hola"),
                 },
@@ -80,19 +84,80 @@ impl Component for App {
                     },
                     spacing: Spacing {
                         margin: Margin {
-                            top: Length::Dots(10),
-                            right: Length::Dots(10),
-                            bottom: Length::Dots(10),
-                            left: Length::Dots(10),
-                        },
-                        padding: Padding {
                             top: Length::Dots(0),
                             right: Length::Dots(0),
                             bottom: Length::Dots(0),
                             left: Length::Dots(0),
                         },
+                        padding: Padding {
+                            top: Length::Dots(10),
+                            right: Length::Dots(10),
+                            bottom: Length::Dots(10),
+                            left: Length::Dots(10),
+                        },
+                    },
+                    background: Background {
+                        color: Color::rgb(0, 255, 0),
                     },
                     content: String::from("Chau"),
+                },
+                &[],
+            ),
+            tree.create(
+                Node::Text {
+                    geometry: Geometry {
+                        x: Length::Dots(0),
+                        y: Length::Dots(0),
+                        width: Length::Auto,
+                        height: Length::Auto,
+                    },
+                    spacing: Spacing {
+                        margin: Margin {
+                            top: Length::Dots(0),
+                            right: Length::Dots(0),
+                            bottom: Length::Dots(0),
+                            left: Length::Dots(0),
+                        },
+                        padding: Padding {
+                            top: Length::Dots(10),
+                            right: Length::Dots(10),
+                            bottom: Length::Dots(10),
+                            left: Length::Dots(10),
+                        },
+                    },
+                    background: Background {
+                        color: Color::rgb(0, 0, 255),
+                    },
+                    content: String::from("Hola"),
+                },
+                &[],
+            ),
+            tree.create(
+                Node::Text {
+                    geometry: Geometry {
+                        x: Length::Dots(0),
+                        y: Length::Dots(0),
+                        width: Length::Auto,
+                        height: Length::Auto,
+                    },
+                    spacing: Spacing {
+                        margin: Margin {
+                            top: Length::Dots(0),
+                            right: Length::Dots(0),
+                            bottom: Length::Dots(0),
+                            left: Length::Dots(0),
+                        },
+                        padding: Padding {
+                            top: Length::Dots(10),
+                            right: Length::Dots(10),
+                            bottom: Length::Dots(10),
+                            left: Length::Dots(10),
+                        },
+                    },
+                    background: Background {
+                        color: Color::rgb(0, 255, 0),
+                    },
+                    content: String::from("åëúóüñ"),
                 },
                 &[],
             ),
@@ -109,9 +174,9 @@ impl Component for App {
                 spacing: Spacing {
                     margin: Margin {
                         top: Length::Dots(10),
-                        right: Length::Dots(0),
-                        bottom: Length::Dots(0),
-                        left: Length::Dots(0),
+                        right: Length::Dots(10),
+                        bottom: Length::Dots(10),
+                        left: Length::Dots(10),
                     },
                     padding: Padding {
                         top: Length::Dots(0),
@@ -119,6 +184,9 @@ impl Component for App {
                         bottom: Length::Dots(0),
                         left: Length::Dots(0),
                     },
+                },
+                background: Background {
+                    color: Color::rgb(255, 0, 0),
                 },
             },
             children,

@@ -131,6 +131,7 @@ impl Renderer {
             Node::Row {
                 geometry,
                 spacing,
+                background,
             } => {
 
                 write!(
@@ -140,12 +141,14 @@ impl Renderer {
                         class = { "{flex_class}" },
                         style = {
                             "margin" => "{margin}",
-                            "padding" => "{padding}"
+                            "padding" => "{padding}",
+                            "background-color" => "{bg_color}"
                         }
                     ),
                     flex_class = self.class_names.flex_row(),
                     margin = spacing.margin,
                     padding = spacing.padding,
+                    bg_color = background.color
                 );
 
                 self.render_children(buffer, root);
@@ -156,6 +159,7 @@ impl Renderer {
             Node::Column {
                 geometry,
                 spacing,
+                background,
             } => {
 
                 write!(
@@ -165,12 +169,14 @@ impl Renderer {
                         class = { "{flex_class}" },
                         style = {
                             "margin" => "{margin}",
-                            "padding" => "{padding}"
+                            "padding" => "{padding}",
+                            "background-color" => "{bg_color}"
                         }
                     ),
                     flex_class = self.class_names.flex_col(),
                     margin = spacing.margin,
                     padding = spacing.padding,
+                    bg_color = background.color
                 );
 
                 self.render_children(buffer, root);
@@ -182,6 +188,7 @@ impl Renderer {
                 geometry,
                 spacing,
                 content,
+                background,
             } => {
                 write!(
                     buffer,
@@ -190,11 +197,13 @@ impl Renderer {
                         style = {
                             "display" => "inline-block",
                             "margin" => "{margin}",
-                            "padding" => "{padding}"
+                            "padding" => "{padding}",
+                            "background-color" => "{bg_color}"
                         }
                     ),
                     margin = spacing.margin,
                     padding = spacing.padding,
+                    bg_color = background.color
                 );
 
                 write!(buffer, "{}", content);
