@@ -47,21 +47,21 @@ mod tests {
 
     #[test]
     fn new_returns_a_node_ref() {
-        let a = NodeRef::new(Index::new(10).unwrap(), TreeId::new());
+        let a = NodeRef::new(Index::new(10).unwrap(), TreeId::new().unwrap());
 
         assert_eq!(a.value(), 10);
     }
 
     #[test]
     fn value_given_a_node_ref_returns_the_internal_numeric_index() {
-        let a = NodeRef::new(Index::new(5).unwrap(), TreeId::new());
+        let a = NodeRef::new(Index::new(5).unwrap(), TreeId::new().unwrap());
 
         assert_eq!(a.value(), 5);
     }
 
     #[test]
     fn index_given_a_node_ref_returns_the_internal_index() {
-        let a = NodeRef::new(Index::new(5).unwrap(), TreeId::new());
+        let a = NodeRef::new(Index::new(5).unwrap(), TreeId::new().unwrap());
 
         assert_eq!(a.index(), Index::new(5).unwrap());
     }
@@ -69,11 +69,14 @@ mod tests {
     #[test]
     fn debug_fmt() {
         assert_eq!(
-            format!("{:?}", NodeRef::new(Index::new(5).unwrap(), TreeId::new())),
+            format!(
+                "{:?}",
+                NodeRef::new(Index::new(5).unwrap(), TreeId::new().unwrap())
+            ),
             "NodeRef(5)"
         );
         assert_eq!(
-            format!("{:?}", NodeRef::new(Index::null(), TreeId::new())),
+            format!("{:?}", NodeRef::new(Index::null(), TreeId::new().unwrap())),
             "NodeRef(-1)"
         );
     }
