@@ -5,4 +5,5 @@ pub struct Geometry {
     pub y: Length,
     pub width: Length,
     pub height: Length,
+    pub max_width: Length,
 }

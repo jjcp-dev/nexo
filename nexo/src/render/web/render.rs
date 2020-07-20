@@ -98,6 +98,7 @@ impl Renderer {
                 geometry,
                 spacing,
                 background,
+                justify,
             } => {
                 write!(
                     buffer,
@@ -107,13 +108,17 @@ impl Renderer {
                         style = {
                             "margin" => "{margin}",
                             "padding" => "{padding}",
-                            "background-color" => "{bg_color}"
+                            "background-color" => "{bg_color}",
+                            "justify-content" => "{justify}",
+                            "max-width" => "{max_width}"
                         }
                     ),
                     flex_class = self.class_names.flex_row(),
                     margin = spacing.margin,
                     padding = spacing.padding,
-                    bg_color = background.color
+                    bg_color = background.color,
+                    justify = justify,
+                    max_width = geometry.max_width
                 );
 
                 self.render_children(buffer, root);
@@ -125,6 +130,7 @@ impl Renderer {
                 geometry,
                 spacing,
                 background,
+                justify,
             } => {
                 write!(
                     buffer,
@@ -134,13 +140,17 @@ impl Renderer {
                         style = {
                             "margin" => "{margin}",
                             "padding" => "{padding}",
-                            "background-color" => "{bg_color}"
+                            "background-color" => "{bg_color}",
+                            "justify-content" => "{justify}",
+                            "max-width" => "{max_width}"
                         }
                     ),
                     flex_class = self.class_names.flex_col(),
                     margin = spacing.margin,
                     padding = spacing.padding,
-                    bg_color = background.color
+                    bg_color = background.color,
+                    justify = justify,
+                    max_width = geometry.max_width
                 );
 
                 self.render_children(buffer, root);
@@ -185,25 +195,5 @@ impl Renderer {
         let mut output = String::with_capacity(1 * 1024 * 1024);
         self.render_node(&mut output, root);
         output
-    }
-
-    #[inline]
-    fn render_rectangle_open(&self, buffer: &mut String, width: Length, height: Length) {
-        write!(
-            buffer,
-            tag_open_str!(
-                div,
-                class = {
-                    "{rectangle}"
-                },
-                style = {
-                    "width" => "{width}",
-                    "height" => "{height}"
-                }
-            ),
-            rectangle = self.class_names.rectangle(),
-            width = width,
-            height = height
-        );
     }
 }
