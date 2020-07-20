@@ -1,0 +1,19 @@
+.nexo-flex-row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+
+.nexo-flex-col {
+    display: flex;
+    flex-direction: column;
+}
+
+.nexo-rectangle {
+    display: inline-block;
+    overflow: auto;
+}
+
+.nexo-text {
+    display: inline-block;
+}
