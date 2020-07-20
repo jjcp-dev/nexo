@@ -12,40 +12,6 @@ pub struct Renderer {
     class_names: ClassNames,
 }
 
-// macro_rules! write_open_tag {
-//     ($buffer:expr, $tag:ident) => {
-//         write!($buffer, "<{}>", stringify!($tag));
-//     };
-//
-//     ($buffer:expr, $tag:ident, class = { $($class:expr)* }, style = { $($key:expr => $value:expr)* }) => {{
-//         $buffer.push_str("<");
-//         $buffer.push_str(stringify!($tag));
-//         $buffer.push_str(" class=\"");
-//         let classes = [$($class),*];
-//         for c in classes.windows(2) {
-//             $buffer.push_str(c[0]);
-//             $buffer.push_str(" ");
-//         }
-//         $buffer.push_str(classes.last().unwrap());
-//         $buffer.push_str("\" style=\"");
-//
-//         $(
-//             $buffer.push_str($key);
-//             $buffer.push_str(":");
-//             $buffer.push_str($value);
-//             $buffer.push_str(";");
-//         )*
-//
-//         $buffer.push_str("\">");
-//     }};
-// }
-//
-// macro_rules! write_close_tag {
-//     ($buffer:expr, $tag:ident) => {
-//         write!($buffer, "</{}>", stringify!($tag));
-//     };
-// }
-
 macro_rules! class_str {
     ($class_name:expr) => {
         concat!(r#"class=""#, $class_name, r#"""#)
@@ -133,7 +99,6 @@ impl Renderer {
                 spacing,
                 background,
             } => {
-
                 write!(
                     buffer,
                     tag_open_str!(
@@ -161,7 +126,6 @@ impl Renderer {
                 spacing,
                 background,
             } => {
-
                 write!(
                     buffer,
                     tag_open_str!(
@@ -212,107 +176,7 @@ impl Renderer {
 
                 write!(buffer, tag_close_str!(p));
             }
-
-            // Node::Rectangle {
-            //     color,
-            //     geometry,
-            //     spacing,
-            // } => {
-            //     write!(
-            //         buffer,
-            //         tag_open_str!(
-            //             div,
-            //             class = { "{rectangle}" },
-            //             style = {
-            //                 "width" => "{width}",
-            //                 "height" => "{height}",
-            //                 "margin" => "{mtop} {mright} {mbottom} {mleft}",
-            //                 "padding" => "{ptop} {pright} {pbottom} {pleft}",
-            //                 "background-color" => "{color}"
-            //             }
-            //         ),
-            //         rectangle = self.class_names.rectangle(),
-            //         width = geometry.width,
-            //         height = geometry.height,
-            //         mtop = spacing.margin.top,
-            //         mright = spacing.margin.right,
-            //         mbottom = spacing.margin.bottom,
-            //         mleft = spacing.margin.left,
-            //         ptop = spacing.padding.top,
-            //         pright = spacing.padding.right,
-            //         pbottom = spacing.padding.bottom,
-            //         pleft = spacing.padding.left,
-            //         color = color,
-            //     );
-
-            //     self.render_children(buffer, root);
-
-            //     write!(buffer, tag_close_str!(div));
-            // }
-
-            _ => ()
-            // Node::Row => {
-            //     write!(
-            //         buffer,
-            //         tag_open_str!(div, class = { "{flex_row}" }),
-            //         flex_row = self.class_names.flex_row()
-            //     );
-
-            //     self.render_children(buffer, root);
-
-            //     write!(buffer, tag_close_str!(div));
-            // }
-            // Node::Col => {
-            //     write!(
-            //         buffer,
-            //         tag_open_str!(div, class = { "{flex_col}" }),
-            //         flex_col = self.class_names.flex_col()
-            //     );
-
-            //     self.render_children(buffer, root);
-
-            //     write!(buffer, tag_close_str!(div));
-            // }
-            // Node::Text(text) => {
-            //     write!(
-            //         buffer,
-            //         tag_open_str!(p, class = { "{text}" }),
-            //         text = self.class_names.text()
-            //     );
-            //     write!(buffer, "{}", text);
-
-            //     self.render_children(buffer, root);
-
-            //     write!(buffer, tag_close_str!(p));
-            // }
-            // Node::Rectangle {
-            //     geometry,
-            //     spacing,
-            //     color,
-            // } => {
-            //     write!(
-            //         buffer,
-            //         tag_open_str!(
-            //             div,
-            //             class = { "{rectangle}" },
-            //             style = {
-            //                 "width" => "{width}",
-            //                 "height" => "{height}",
-            //                 "margin" => "{margin}",
-            //                 "background-color" => "red"
-            //             }
-            //         ),
-            //         rectangle = self.class_names.rectangle(),
-            //         width = geometry.width,
-            //         height = geometry.height,
-            //         margin = spacing.margin
-            //     );
-
-            //     self.render_children(buffer, root);
-
-            //     write!(buffer, tag_close_str!(div));
-            // }
-            // _ => (),
+            _ => (),
         }
     }
 
