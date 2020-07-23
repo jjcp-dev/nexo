@@ -39,7 +39,7 @@ impl Tree {
 
     pub fn create(&mut self, node: Node, children: &[NodeRef]) -> NodeRef {
         match node {
-            Node::Component(x) => x.render(self, children),
+            // Node::Component(x) => x.render(self, children),
             _ => {
                 // TODO: Look for an empty slot to put the new node in.
                 self.nodes.push(node);

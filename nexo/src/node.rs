@@ -4,27 +4,10 @@ use super::geometry::Geometry;
 use super::justify::Justify;
 use super::spacing::Spacing;
 
+use super::layout::Layout;
+use super::style::Style;
+
 pub enum Node {
-    Row {
-        geometry: Geometry,
-        spacing: Spacing,
-        background: Background,
-        justify: Justify,
-    },
-
-    Column {
-        geometry: Geometry,
-        spacing: Spacing,
-        background: Background,
-        justify: Justify,
-    },
-
-    Text {
-        geometry: Geometry,
-        spacing: Spacing,
-        background: Background,
-        content: String,
-    },
-
-    Component(Box<dyn Component>),
+    Text(String),
+    Element { layout: Layout, style: Style },
 }

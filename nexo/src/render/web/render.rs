@@ -94,98 +94,98 @@ impl Renderer {
         let node = self.tree.get(root);
 
         match node {
-            Node::Row {
-                geometry,
-                spacing,
-                background,
-                justify,
-            } => {
-                write!(
-                    buffer,
-                    tag_open_str!(
-                        div,
-                        class = { "{flex_class}" },
-                        style = {
-                            "margin" => "{margin}",
-                            "padding" => "{padding}",
-                            "background-color" => "{bg_color}",
-                            "justify-content" => "{justify}",
-                            "max-width" => "{max_width}"
-                        }
-                    ),
-                    flex_class = self.class_names.flex_row(),
-                    margin = spacing.margin,
-                    padding = spacing.padding,
-                    bg_color = background.color,
-                    justify = justify,
-                    max_width = geometry.max_width
-                );
+            // Node::Row {
+            //     geometry,
+            //     spacing,
+            //     background,
+            //     justify,
+            // } => {
+            //     write!(
+            //         buffer,
+            //         tag_open_str!(
+            //             div,
+            //             class = { "{flex_class}" },
+            //             style = {
+            //                 "margin" => "{margin}",
+            //                 "padding" => "{padding}",
+            //                 "background-color" => "{bg_color}",
+            //                 "justify-content" => "{justify}",
+            //                 "max-width" => "{max_width}"
+            //             }
+            //         ),
+            //         flex_class = self.class_names.flex_row(),
+            //         margin = spacing.margin,
+            //         padding = spacing.padding,
+            //         bg_color = background.color,
+            //         justify = justify,
+            //         max_width = geometry.max_width
+            //     );
 
-                self.render_children(buffer, root);
+            //     self.render_children(buffer, root);
 
-                write!(buffer, tag_close_str!(div));
-            }
+            //     write!(buffer, tag_close_str!(div));
+            // }
 
-            Node::Column {
-                geometry,
-                spacing,
-                background,
-                justify,
-            } => {
-                write!(
-                    buffer,
-                    tag_open_str!(
-                        div,
-                        class = { "{flex_class}" },
-                        style = {
-                            "margin" => "{margin}",
-                            "padding" => "{padding}",
-                            "background-color" => "{bg_color}",
-                            "justify-content" => "{justify}",
-                            "max-width" => "{max_width}"
-                        }
-                    ),
-                    flex_class = self.class_names.flex_col(),
-                    margin = spacing.margin,
-                    padding = spacing.padding,
-                    bg_color = background.color,
-                    justify = justify,
-                    max_width = geometry.max_width
-                );
+            // Node::Column {
+            //     geometry,
+            //     spacing,
+            //     background,
+            //     justify,
+            // } => {
+            //     write!(
+            //         buffer,
+            //         tag_open_str!(
+            //             div,
+            //             class = { "{flex_class}" },
+            //             style = {
+            //                 "margin" => "{margin}",
+            //                 "padding" => "{padding}",
+            //                 "background-color" => "{bg_color}",
+            //                 "justify-content" => "{justify}",
+            //                 "max-width" => "{max_width}"
+            //             }
+            //         ),
+            //         flex_class = self.class_names.flex_col(),
+            //         margin = spacing.margin,
+            //         padding = spacing.padding,
+            //         bg_color = background.color,
+            //         justify = justify,
+            //         max_width = geometry.max_width
+            //     );
 
-                self.render_children(buffer, root);
+            //     self.render_children(buffer, root);
 
-                write!(buffer, tag_close_str!(div));
-            }
+            //     write!(buffer, tag_close_str!(div));
+            // }
 
-            Node::Text {
-                geometry,
-                spacing,
-                content,
-                background,
-            } => {
-                write!(
-                    buffer,
-                    tag_open_str!(
-                        p,
-                        style = {
-                            "display" => "inline-block",
-                            "margin" => "{margin}",
-                            "padding" => "{padding}",
-                            "background-color" => "{bg_color}"
-                        }
-                    ),
-                    margin = spacing.margin,
-                    padding = spacing.padding,
-                    bg_color = background.color
-                );
+            // Node::Text {
+            //     geometry,
+            //     spacing,
+            //     content,
+            //     background,
+            // } => {
+            //     write!(
+            //         buffer,
+            //         tag_open_str!(
+            //             p,
+            //             style = {
+            //                 "display" => "inline-block",
+            //                 "margin" => "{margin}",
+            //                 "padding" => "{padding}",
+            //                 "background-color" => "{bg_color}"
+            //             }
+            //         ),
+            //         margin = spacing.margin,
+            //         padding = spacing.padding,
+            //         bg_color = background.color
+            //     );
 
-                write!(buffer, "{}", content);
+            //     write!(buffer, "{}", content);
 
-                self.render_children(buffer, root);
+            //     self.render_children(buffer, root);
 
-                write!(buffer, tag_close_str!(p));
-            }
+            //     write!(buffer, tag_close_str!(p));
+            // }
             _ => (),
         }
     }
