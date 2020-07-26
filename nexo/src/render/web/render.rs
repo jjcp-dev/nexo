@@ -3,6 +3,7 @@ use std::fmt::Write;
 use crate::component::Component;
 use crate::length::Length;
 use crate::node::Node;
+use crate::style::Style;
 use crate::tree::{NodeRef, Tree};
 
 use super::css::ClassNames;
@@ -10,6 +11,7 @@ use super::css::ClassNames;
 pub struct Renderer {
     tree: Tree,
     class_names: ClassNames,
+    current_style: Style,
 }
 
 macro_rules! class_str {
@@ -94,6 +96,14 @@ impl Renderer {
         let node = self.tree.get(root);
 
         match node {
+            Node::Text(text) => {
+                // FIXME: The text has to be HTML encoded!
+                write!(buffer, "{}", text);
+            }
+
+            Node::Element { style, layout } => {
+                //
+            }
             // Node::Row {
             //     geometry,
             //     spacing,
