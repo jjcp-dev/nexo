@@ -10,4 +10,5 @@ use super::style::Style;
 pub enum Node {
     Text(String),
     Element { layout: Layout, style: Style },
+    Component(Box<dyn Component>),
 }

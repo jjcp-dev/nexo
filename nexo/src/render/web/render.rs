@@ -1,9 +1,10 @@
 use std::fmt::Write;
 
 use crate::component::Component;
+use crate::layout::Layout;
 use crate::length::Length;
 use crate::node::Node;
-use crate::style::Style;
+use crate::style::{Background, Property, Style};
 use crate::tree::{NodeRef, Tree};
 
 use super::css::ClassNames;
@@ -83,6 +84,7 @@ impl Renderer {
         Renderer {
             tree: Tree::with_capacity(100),
             class_names: ClassNames::new(String::from("nexo")),
+            current_style: Style::default(),
         }
     }
 
@@ -92,110 +94,63 @@ impl Renderer {
         }
     }
 
+    fn write_style(&self, buffer: &mut String, style: &Style) {
+        write!(
+            buffer,
+            concat!(
+                "style=\"",
+                "margin:{margin};",
+                "padding:{padding};",
+                "width:{width};",
+                "height:{height};",
+            ),
+            margin = style.margin,
+            padding = style.padding,
+            width = style.width,
+            height = style.height,
+        );
+
+        match style.background.color {
+            Property::Inherit => {}
+            Property::With(x) => {
+                write!(buffer, "background-color:{};", x);
+            }
+        }
+
+        write!(buffer, "\"");
+    }
+
     fn render_node(&self, buffer: &mut String, root: NodeRef) {
         let node = self.tree.get(root);
 
         match node {
             Node::Text(text) => {
+                write!(buffer, r#"<p"#);
+                self.write_style(buffer, &style);
+                write!(buffer, ">");
                 // FIXME: The text has to be HTML encoded!
                 write!(buffer, "{}", text);
+                write!(buffer, "</p>");
             }
 
-            Node::Element { style, layout } => {
-                //
-            }
-            // Node::Row {
-            //     geometry,
-            //     spacing,
-            //     background,
-            //     justify,
-            // } => {
-            //     write!(
-            //         buffer,
-            //         tag_open_str!(
-            //             div,
-            //             class = { "{flex_class}" },
-            //             style = {
-            //                 "margin" => "{margin}",
-            //                 "padding" => "{padding}",
-            //                 "background-color" => "{bg_color}",
-            //                 "justify-content" => "{justify}",
-            //                 "max-width" => "{max_width}"
-            //             }
-            //         ),
-            //         flex_class = self.class_names.flex_row(),
-            //         margin = spacing.margin,
-            //         padding = spacing.padding,
-            //         bg_color = background.color,
-            //         justify = justify,
-            //         max_width = geometry.max_width
-            //     );
-
-            //     self.render_children(buffer, root);
-
-            //     write!(buffer, tag_close_str!(div));
-            // }
-
-            // Node::Column {
-            //     geometry,
-            //     spacing,
-            //     background,
-            //     justify,
-            // } => {
-            //     write!(
-            //         buffer,
-            //         tag_open_str!(
-            //             div,
-            //             class = { "{flex_class}" },
-            //             style = {
-            //                 "margin" => "{margin}",
-            //                 "padding" => "{padding}",
-            //                 "background-color" => "{bg_color}",
-            //                 "justify-content" => "{justify}",
-            //                 "max-width" => "{max_width}"
-            //             }
-            //         ),
-            //         flex_class = self.class_names.flex_col(),
-            //         margin = spacing.margin,
-            //         padding = spacing.padding,
-            //         bg_color = background.color,
-            //         justify = justify,
-            //         max_width = geometry.max_width
-            //     );
-
-            //     self.render_children(buffer, root);
-
-            //     write!(buffer, tag_close_str!(div));
-            // }
-
-            // Node::Text {
-            //     geometry,
-            //     spacing,
-            //     content,
-            //     background,
-            // } => {
-            //     write!(
-            //         buffer,
-            //         tag_open_str!(
-            //             p,
-            //             style = {
-            //                 "display" => "inline-block",
-            //                 "margin" => "{margin}",
-            //                 "padding" => "{padding}",
-            //                 "background-color" => "{bg_color}"
-            //             }
-            //         ),
-            //         margin = spacing.margin,
-            //         padding = spacing.padding,
-            //         bg_color = background.color
-            //     );
-
-            //     write!(buffer, "{}", content);
-
-            //     self.render_children(buffer, root);
-
-            //     write!(buffer, tag_close_str!(p));
-            // }
+            Node::Element { style, layout } => match layout {
+                Layout::Row => {
+                    write!(buffer, r#"<div class=""#);
+                    write!(buffer, "{}\" ", self.class_names.flex_row());
+                    self.write_style(buffer, &style);
+                    write!(buffer, ">");
+                    self.render_children(buffer, root);
+                    write!(buffer, "</div>");
+                }
+                Layout::Column => {
+                    write!(buffer, r#"<div class=""#);
+                    write!(buffer, "{}\" ", self.class_names.flex_col());
+                    self.write_style(buffer, &style);
+                    write!(buffer, ">");
+                    self.render_children(buffer, root);
+                    write!(buffer, "</div>");
+                }
+            },
             _ => (),
         }
     }
@@ -203,6 +158,9 @@ impl Renderer {
     pub fn render<T: Component>(&mut self, component: T) -> String {
         let root = component.render(&mut self.tree, &[]);
         let mut output = String::with_capacity(1 * 1024 * 1024);
+
+        self.current_style = Style::default();
+
         self.render_node(&mut output, root);
         output
     }
