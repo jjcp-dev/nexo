@@ -124,12 +124,12 @@ impl Renderer {
         let node = self.tree.get(root);
 
         match node {
-            Node::Text(text) => {
-                write!(buffer, r#"<p"#);
+            Node::Text { content, style } => {
+                write!(buffer, "<p ");
                 self.write_style(buffer, &style);
                 write!(buffer, ">");
                 // FIXME: The text has to be HTML encoded!
-                write!(buffer, "{}", text);
+                write!(buffer, "{}", content);
                 write!(buffer, "</p>");
             }
 

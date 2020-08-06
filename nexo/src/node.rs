@@ -8,7 +8,7 @@ use super::layout::Layout;
 use super::style::Style;
 
 pub enum Node {
-    Text(String),
+    Text { content: String, style: Style },
     Element { layout: Layout, style: Style },
     Component(Box<dyn Component>),
 }

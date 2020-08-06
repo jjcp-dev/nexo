@@ -1,5 +1,6 @@
 use std::vec::Vec;
 
+use super::super::listeners::Listeners;
 use super::index::Index;
 use super::node_ref::NodeRef;
 use super::tree_id::TreeId;
@@ -10,6 +11,7 @@ pub struct Tree {
     id: TreeId,
     nodes: Vec<Node>,
     links: Vec<Link>,
+    listeners: Vec<Listeners>,
 }
 
 struct Link {
@@ -26,6 +28,7 @@ impl Tree {
             id: TreeId::new().unwrap(),
             nodes: Vec::new(),
             links: Vec::new(),
+            listeners: Vec::new(),
         }
     }
 
@@ -34,6 +37,7 @@ impl Tree {
             id: TreeId::new().unwrap(),
             nodes: Vec::with_capacity(capacity),
             links: Vec::with_capacity(capacity),
+            listeners: Vec::with_capacity(capacity),
         }
     }
 
@@ -57,6 +61,12 @@ impl Tree {
 
                 NodeRef::new(index, self.id)
             }
+        }
+    }
+
+    pub fn add_on_click_listener(&mut self, node: NodeRef, callback: Box<dyn FnMut()>) {
+        if !node.index().is_null() {
+            self.listeners[node.index().value()].on_click = callback;
         }
     }
 
