@@ -1,7 +1,6 @@
 pub mod background;
 pub mod color;
 pub mod component;
-pub mod geometry;
 pub mod justify;
 pub mod layout;
 pub mod length;

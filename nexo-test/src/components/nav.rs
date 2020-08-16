@@ -3,7 +3,7 @@ use nexo::component::Component;
 use nexo::layout::Layout;
 use nexo::length::Length;
 use nexo::node::Node;
-use nexo::spacing::{Margin, Padding, Spacing};
+use nexo::spacing::{Margin, Padding};
 use nexo::style::{Background, Property, Style};
 use nexo::tree::{NodeRef, Tree};
 
@@ -56,11 +56,11 @@ impl Component for Nav {
             ),
         ];
 
-        tree.add_on_click_listener(children[0], Box::new(|| println!("Hola")));
+        //tree.add_on_click_listener(children[0], Box::new(|| println!("Hola")));
 
         tree.create(
             Node::Element {
-                layout: Layout::Row,
+                layout: Layout::Column,
                 style: Style::default(),
             },
             children,

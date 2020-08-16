@@ -27,8 +27,6 @@ fn index() -> rocket::response::content::Html<String> {
         body = a.render(App::new("App Name"))
     );
 
-    // renderer.render(Test::new("App Name"));
-    // rocket::response::content::Html(renderer.render(App::new("App Name")))
     rocket::response::content::Html(r)
 }
 
