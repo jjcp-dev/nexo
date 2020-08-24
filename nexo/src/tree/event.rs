@@ -1,4 +1,0 @@
-pub struct Event {
-    click
-}
-
