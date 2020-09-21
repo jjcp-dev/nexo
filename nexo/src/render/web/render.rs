@@ -1,18 +1,18 @@
-// use std::fmt::Write;
+use std::fmt::Write;
 
 use crate::component::Component;
-// use crate::layout::Layout;
-// use crate::length::Length;
-// use crate::node::Node;
-// use crate::style::{Background, Property, Style};
-// use crate::tree::{NodeRef, Tree};
+use crate::layout::Layout;
+use crate::length::Length;
+use crate::node::Node;
+use crate::style::{Background, Property, Style};
+use crate::tree::{NodeRef, Tree};
 
-// use super::css::ClassNames;
+use super::css::ClassNames;
 
 pub struct Renderer {
-    // tree: Tree,
-    // class_names: ClassNames,
-    // current_style: Style,
+    tree: Tree,
+    class_names: ClassNames,
+    current_style: Style,
 }
 
 impl Renderer {
