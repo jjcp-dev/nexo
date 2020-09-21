@@ -13,7 +13,30 @@ extern {
     fn alert(s: &str);
 }
 
+
+use nexo::component::Component;
+use nexo::tree::{Tree, NodeRef};
+use nexo::node::Node;
+use nexo::style::Style;
+use nexo::layout::Layout;
+
+struct App;
+
+impl Component for App {
+    fn render(&self, tree: &mut Tree, _children: &[NodeRef]) -> NodeRef {
+        let c = [
+            tree.create(Node::Text{content: "Hola".to_string(), style: Style::default()}, &[]),
+            tree.create(Node::Text{content: "Mundo".to_string(), style: Style::default()}, &[]),
+        ];
+        tree.create(Node::Element{layout: Layout::Column, style: Style::default()}, &c)
+    }
+}
+
+use nexo::render::web::render::Renderer;
+
 #[wasm_bindgen]
 pub fn greet() {
-    alert("Hello, web!");
+    let mut r = Renderer::new();
+
+    r.render(App{});
 }
