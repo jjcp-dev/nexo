@@ -8,6 +8,8 @@ use crate::style::{Background, Property, Style};
 use crate::tree::{NodeRef, Tree};
 
 use web_sys::{HtmlElement, Element, Document};
+use wasm_bindgen::prelude::*;
+use wasm_bindgen::JsCast;
 
 use super::css::ClassNames;
 
@@ -26,7 +28,7 @@ impl Renderer {
         }
     }
 
-    fn render_children(&self, document: &mut Document, parent: &mut Element, root: NodeRef) {
+    fn render_children(&self, document: &mut Document, parent: &mut HtmlElement, root: NodeRef) {
         for (_, n) in self.tree.children(root) {
             self.render_node(document, parent, n);
         }
@@ -58,24 +60,33 @@ impl Renderer {
     //     write!(buffer, "\"");
     // }
 
-    fn render_node(&self, document: &mut Document, parent: &mut Element, root: NodeRef) {
+    fn render_node(&self, document: &mut Document, parent: &mut HtmlElement, root: NodeRef) {
         let node = self.tree.get(root);
 
         match node {
             Node::Text { content, style } => {
-                let mut p = document.create_element("p").unwrap();
+                let p = wasm_bindgen::JsCast::dyn_into::<web_sys::HtmlElement>(document.create_element("p").unwrap()).unwrap();
                 p.set_inner_html(content);
+
+                let s = p.style();
+                match style.background.color {
+                    Property::Inherit => (),
+                    Property::With(x) => {
+                        s.set_property("background-color", &format!("{}", x)).unwrap();
+                    }
+                }
+
                 parent.append_child(&p).unwrap();
             }
 
             Node::Element { style, layout } => match layout {
                 Layout::Row => {
-                    let mut div = document.create_element("div").unwrap();
+                    let mut div = wasm_bindgen::JsCast::dyn_into::<web_sys::HtmlElement>(document.create_element("div").unwrap()).unwrap();
                     self.render_children(document, &mut div, root);
                     parent.append_child(&div).unwrap();
                 }
                 Layout::Column => {
-                    let mut div = document.create_element("div").unwrap();
+                    let mut div = wasm_bindgen::JsCast::dyn_into::<web_sys::HtmlElement>(document.create_element("div").unwrap()).unwrap();
                     self.render_children(document, &mut div, root);
                     parent.append_child(&div).unwrap();
                 }
@@ -89,10 +100,8 @@ impl Renderer {
 
         let window = web_sys::window().expect("no global `window` exists");
         let mut document = window.document().expect("should have a document on window");
-        let body = document.body().expect("document should have a body");
+        let mut body = document.body().expect("document should have a body");
 
-        let mut div = document.create_element("div").unwrap();
-        self.render_node(&mut document, &mut div, root);
-        body.append_child(&div).unwrap();
+        self.render_node(&mut document, &mut body, root);
     }
 }
