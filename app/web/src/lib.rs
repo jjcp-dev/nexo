@@ -37,7 +37,5 @@ use nexo::render::web::render::Renderer;
 
 #[wasm_bindgen]
 pub fn greet() {
-    let mut r = Renderer::new();
-
-    r.render(App{});
+    Renderer::new().render(App{});
 }
