@@ -27,6 +27,7 @@ impl Component for App {
         let c = [
             tree.create(Node::Text{content: "Hola".to_string(), style: Style::default()}, &[]),
             tree.create(Node::Text{content: "Mundo".to_string(), style: Style::default()}, &[]),
+            tree.create(Node::Text{content: "Oi oi oi".to_string(), style: Style::default()}, &[]),
         ];
         tree.create(Node::Element{layout: Layout::Column, style: Style::default()}, &c)
     }
