@@ -7,9 +7,9 @@ use crate::node::Node;
 use crate::style::{Background, Property, Style};
 use crate::tree::{NodeRef, Tree};
 
-use web_sys::{HtmlElement, Element, Document};
 use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsCast;
+use web_sys::{Document, Element, HtmlElement};
 
 use super::css::ClassNames;
 
@@ -17,14 +17,16 @@ pub struct Renderer {
     tree: Tree,
     class_names: ClassNames,
     current_style: Style,
+    root_element_id: String,
 }
 
 impl Renderer {
-    pub fn new() -> Renderer {
+    pub fn new(root_id: String) -> Renderer {
         Renderer {
             tree: Tree::with_capacity(100),
             class_names: ClassNames::new(String::from("nexo")),
             current_style: Style::default(),
+            root_element_id: root_id,
         }
     }
 
@@ -34,45 +36,35 @@ impl Renderer {
         }
     }
 
-    // fn write_style(&self, buffer: &mut String, style: &Style) {
-    //     write!(
-    //         buffer,
-    //         concat!(
-    //             "style=\"",
-    //             "margin:{margin};",
-    //             "padding:{padding};",
-    //             "width:{width};",
-    //             "height:{height};",
-    //         ),
-    //         margin = style.margin,
-    //         padding = style.padding,
-    //         width = style.width,
-    //         height = style.height,
-    //     );
+    pub fn render<T: Component>(&mut self, component: T) {
+        let root = component.render(&mut self.tree, &[]);
 
-    //     match style.background.color {
-    //         Property::Inherit => {}
-    //         Property::With(x) => {
-    //             write!(buffer, "background-color:{};", x);
-    //         }
-    //     }
+        let window = web_sys::window().expect("no global `window` exists");
+        let mut document = window.document().expect("should have a document on window");
 
-    //     write!(buffer, "\"");
-    // }
+        let mut html_root: HtmlElement = document
+            .get_element_by_id(&self.root_element_id)
+            .unwrap()
+            .dyn_into()
+            .unwrap();
 
-    fn render_node(&self, document: &mut Document, parent: &mut HtmlElement, root: NodeRef) {
+        self.render_node(&document, &html_root, root);
+    }
+
+    fn render_node(&self, document: &Document, parent: &HtmlElement, root: NodeRef) {
         let node = self.tree.get(root);
 
         match node {
             Node::Text { content, style } => {
-                let p = wasm_bindgen::JsCast::dyn_into::<web_sys::HtmlElement>(document.create_element("p").unwrap()).unwrap();
+                let p: HtmlElement = document.create_element("p").unwrap().dyn_into().unwrap();
                 p.set_inner_html(content);
 
                 let s = p.style();
                 match style.background.color {
                     Property::Inherit => (),
                     Property::With(x) => {
-                        s.set_property("background-color", &format!("{}", x)).unwrap();
+                        s.set_property("background-color", &format!("{}", x))
+                            .unwrap();
                     }
                 }
 
@@ -81,27 +73,19 @@ impl Renderer {
 
             Node::Element { style, layout } => match layout {
                 Layout::Row => {
-                    let mut div = wasm_bindgen::JsCast::dyn_into::<web_sys::HtmlElement>(document.create_element("div").unwrap()).unwrap();
+                    let mut div: HtmlElement =
+                        document.create_element("div").unwrap().dyn_into().unwrap();
                     self.render_children(document, &mut div, root);
                     parent.append_child(&div).unwrap();
                 }
                 Layout::Column => {
-                    let mut div = wasm_bindgen::JsCast::dyn_into::<web_sys::HtmlElement>(document.create_element("div").unwrap()).unwrap();
+                    let mut div: HtmlElement =
+                        document.create_element("div").unwrap().dyn_into().unwrap();
                     self.render_children(document, &mut div, root);
                     parent.append_child(&div).unwrap();
                 }
             },
             _ => (),
         }
-    }
-
-    pub fn render<T: Component>(&mut self, component: T) {
-        let root = component.render(&mut self.tree, &[]);
-
-        let window = web_sys::window().expect("no global `window` exists");
-        let mut document = window.document().expect("should have a document on window");
-        let mut body = document.body().expect("document should have a body");
-
-        self.render_node(&mut document, &mut body, root);
     }
 }

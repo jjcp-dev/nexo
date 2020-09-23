@@ -1,3 +1,5 @@
 pub mod css;
-pub mod render;
 mod display;
+mod render;
+
+pub use render::Renderer;
