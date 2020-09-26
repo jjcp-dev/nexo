@@ -69,7 +69,7 @@ impl Component for App {
         ];
         tree.create(
             Node::Element {
-                layout: Layout::Column,
+                layout: Layout::Row,
                 style: Style::default(),
             },
             &c,

@@ -30,7 +30,7 @@ impl Renderer {
         }
     }
 
-    fn render_children(&self, document: &mut Document, parent: &mut HtmlElement, root: NodeRef) {
+    fn render_children(&self, document: &Document, parent: &HtmlElement, root: NodeRef) {
         for (_, n) in self.tree.children(root) {
             self.render_node(document, parent, n);
         }
@@ -38,11 +38,10 @@ impl Renderer {
 
     pub fn render<T: Component>(&mut self, component: T) {
         let root = component.render(&mut self.tree, &[]);
-
         let window = web_sys::window().expect("no global `window` exists");
-        let mut document = window.document().expect("should have a document on window");
+        let document = window.document().expect("should have a document on window");
 
-        let mut html_root: HtmlElement = document
+        let html_root: HtmlElement = document
             .get_element_by_id(&self.root_element_id)
             .unwrap()
             .dyn_into()
@@ -75,6 +74,8 @@ impl Renderer {
                 Layout::Row => {
                     let mut div: HtmlElement =
                         document.create_element("div").unwrap().dyn_into().unwrap();
+                    div.set_class_name("nexo-flex-row");
+
                     self.render_children(document, &mut div, root);
                     parent.append_child(&div).unwrap();
                 }
