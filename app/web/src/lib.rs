@@ -41,6 +41,48 @@ impl Component for App {
                 },
                 &[],
             ),
+            tree.create(
+                Node::Text {
+                    content: "Pepe".to_string(),
+                    style: Style::default(),
+                },
+                &[],
+            ),
+            tree.create(
+                Node::Text {
+                    content: "Paco".to_string(),
+                    style: Style::default(),
+                },
+                &[],
+            ),
+            tree.create(
+                Node::Text {
+                    content: "Pepe".to_string(),
+                    style: Style::default(),
+                },
+                &[],
+            ),
+            tree.create(
+                Node::Text {
+                    content: "Paco".to_string(),
+                    style: Style::default(),
+                },
+                &[],
+            ),
+            tree.create(
+                Node::Text {
+                    content: "Pepe".to_string(),
+                    style: Style::default(),
+                },
+                &[],
+            ),
+            tree.create(
+                Node::Text {
+                    content: "Paco".to_string(),
+                    style: Style::default(),
+                },
+                &[],
+            ),
         ];
         let c = [
             tree.create(
