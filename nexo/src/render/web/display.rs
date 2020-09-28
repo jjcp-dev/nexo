@@ -4,6 +4,7 @@ use crate::color::Color;
 use crate::justify::Justify;
 use crate::length::Length;
 use crate::spacing::{Margin, Padding};
+use crate::style::BorderRadius;
 
 impl fmt::Display for Length {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -48,5 +49,15 @@ impl fmt::Display for Justify {
             Justify::Center => write!(f, "{}", "center"),
             Justify::Between => write!(f, "{}", "space-between"),
         }
+    }
+}
+
+impl fmt::Display for BorderRadius {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(
+            f,
+            "{} {} {} {}",
+            self.top_left, self.top_right, self.bottom_right, self.bottom_left
+        )
     }
 }

@@ -19,10 +19,17 @@ use nexo::layout::Layout;
 use nexo::length::Length;
 use nexo::node::Node;
 use nexo::spacing::{Margin, Padding};
-use nexo::style::{Background, Property, Style};
+use nexo::style::{Background, BorderRadius, Property, Style};
 use nexo::tree::{NodeRef, Tree};
 
 struct App;
+
+/*
+
+Row {} => {
+}
+
+*/
 
 impl Component for App {
     fn render(&self, tree: &mut Tree, _children: &[NodeRef]) -> NodeRef {
@@ -97,13 +104,19 @@ impl Component for App {
                     content: "Mundo".to_string(),
                     style: Style {
                         background: Background {
-                            color: Property::With(Color::rgb(255, 0, 255)),
+                            color: Property::With(Color::rgb(0xBA, 0xDA, 0x55)),
                         },
                         margin: Margin {
                             top: Length::Dots(20),
                             right: Length::Dots(20),
                             bottom: Length::Dots(20),
                             left: Length::Dots(20),
+                        },
+                        radius: BorderRadius {
+                            top_left: Length::Dots(20),
+                            top_right: Length::Dots(0),
+                            bottom_left: Length::Dots(0),
+                            bottom_right: Length::Dots(20),
                         },
                         padding: Padding {
                             top: Length::Dots(0),
@@ -137,7 +150,7 @@ impl Component for App {
                 layout: Layout::Row,
                 style: Style {
                     background: Background {
-                        color: Property::With(Color::rgb(255, 0, 255)),
+                        color: Property::With(Color::white()),
                     },
                     margin: Margin {
                         top: Length::Dots(0),
@@ -151,7 +164,13 @@ impl Component for App {
                         bottom: Length::Dots(0),
                         left: Length::Dots(0),
                     },
-                    width: Length::Dots(120),
+                    radius: BorderRadius {
+                        top_left: Length::Dots(0),
+                        top_right: Length::Dots(0),
+                        bottom_left: Length::Dots(0),
+                        bottom_right: Length::Dots(0),
+                    },
+                    width: Length::Auto,
                     height: Length::Auto,
                 },
             },

@@ -69,6 +69,8 @@ impl Renderer {
             .unwrap();
         s.set_property("height", &format!("{}", style.height))
             .unwrap();
+        s.set_property("border-radius", &format!("{}", style.radius))
+            .unwrap();
     }
 
     fn render_node(&self, document: &Document, parent: &HtmlElement, root: NodeRef) {
