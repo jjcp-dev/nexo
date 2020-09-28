@@ -50,6 +50,27 @@ impl Renderer {
         self.render_node(&document, &html_root, root);
     }
 
+    fn set_style(&self, style: &Style, element: &HtmlElement) {
+        let s = element.style();
+
+        match style.background.color {
+            Property::Inherit => (),
+            Property::With(x) => {
+                s.set_property("background-color", &format!("{}", x))
+                    .unwrap();
+            }
+        }
+
+        s.set_property("margin", &format!("{}", style.margin))
+            .unwrap();
+        s.set_property("padding", &format!("{}", style.padding))
+            .unwrap();
+        s.set_property("width", &format!("{}", style.width))
+            .unwrap();
+        s.set_property("height", &format!("{}", style.height))
+            .unwrap();
+    }
+
     fn render_node(&self, document: &Document, parent: &HtmlElement, root: NodeRef) {
         let node = self.tree.get(root);
 
@@ -57,35 +78,23 @@ impl Renderer {
             Node::Text { content, style } => {
                 let p: HtmlElement = document.create_element("p").unwrap().dyn_into().unwrap();
                 p.set_inner_html(content);
-
-                let s = p.style();
-                match style.background.color {
-                    Property::Inherit => (),
-                    Property::With(x) => {
-                        s.set_property("background-color", &format!("{}", x))
-                            .unwrap();
-                    }
-                }
-
+                self.set_style(&style, &p);
                 parent.append_child(&p).unwrap();
             }
 
-            Node::Element { style, layout } => match layout {
-                Layout::Row => {
-                    let mut div: HtmlElement =
-                        document.create_element("div").unwrap().dyn_into().unwrap();
-                    div.set_class_name("nexo-flex-row");
+            Node::Element { style, layout } => {
+                let classes = match layout {
+                    Layout::Row => "nexo-flex-row",
+                    Layout::Column => "nexo-flex-col",
+                };
 
-                    self.render_children(document, &mut div, root);
-                    parent.append_child(&div).unwrap();
-                }
-                Layout::Column => {
-                    let mut div: HtmlElement =
-                        document.create_element("div").unwrap().dyn_into().unwrap();
-                    self.render_children(document, &mut div, root);
-                    parent.append_child(&div).unwrap();
-                }
-            },
+                let mut div: HtmlElement =
+                    document.create_element("div").unwrap().dyn_into().unwrap();
+                div.set_class_name(classes);
+                self.set_style(&style, &div);
+                self.render_children(document, &mut div, root);
+                parent.append_child(&div).unwrap();
+            }
             _ => (),
         }
     }

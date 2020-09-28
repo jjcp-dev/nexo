@@ -26,6 +26,22 @@ struct App;
 
 impl Component for App {
     fn render(&self, tree: &mut Tree, _children: &[NodeRef]) -> NodeRef {
+        let c2 = [
+            tree.create(
+                Node::Text {
+                    content: "Pepe".to_string(),
+                    style: Style::default(),
+                },
+                &[],
+            ),
+            tree.create(
+                Node::Text {
+                    content: "Paco".to_string(),
+                    style: Style::default(),
+                },
+                &[],
+            ),
+        ];
         let c = [
             tree.create(
                 Node::Text {
@@ -42,10 +58,10 @@ impl Component for App {
                             color: Property::With(Color::rgb(255, 0, 255)),
                         },
                         margin: Margin {
-                            top: Length::Dots(0),
-                            right: Length::Dots(0),
-                            bottom: Length::Dots(0),
-                            left: Length::Dots(0),
+                            top: Length::Dots(20),
+                            right: Length::Dots(20),
+                            bottom: Length::Dots(20),
+                            left: Length::Dots(20),
                         },
                         padding: Padding {
                             top: Length::Dots(0),
@@ -66,11 +82,36 @@ impl Component for App {
                 },
                 &[],
             ),
+            tree.create(
+                Node::Element {
+                    layout: Layout::Column,
+                    style: Style::default(),
+                },
+                &c2,
+            ),
         ];
         tree.create(
             Node::Element {
                 layout: Layout::Row,
-                style: Style::default(),
+                style: Style {
+                    background: Background {
+                        color: Property::With(Color::rgb(255, 0, 255)),
+                    },
+                    margin: Margin {
+                        top: Length::Dots(0),
+                        right: Length::Dots(0),
+                        bottom: Length::Dots(0),
+                        left: Length::Dots(0),
+                    },
+                    padding: Padding {
+                        top: Length::Dots(0),
+                        right: Length::Dots(0),
+                        bottom: Length::Dots(0),
+                        left: Length::Dots(0),
+                    },
+                    width: Length::Dots(120),
+                    height: Length::Auto,
+                },
             },
             &c,
         )
