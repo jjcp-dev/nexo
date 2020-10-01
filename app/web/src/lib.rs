@@ -153,10 +153,10 @@ impl Component for App {
                         color: Property::With(Color::white()),
                     },
                     margin: Margin {
-                        top: Length::Dots(0),
+                        top: Length::Dots(20),
                         right: Length::Dots(0),
                         bottom: Length::Dots(0),
-                        left: Length::Dots(0),
+                        left: Length::Dots(40),
                     },
                     padding: Padding {
                         top: Length::Dots(0),

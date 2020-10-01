@@ -64,12 +64,6 @@ impl Tree {
         }
     }
 
-    pub fn add_on_click_listener(&mut self, node: NodeRef, callback: Box<dyn FnMut()>) {
-        if !node.index().is_null() {
-            self.listeners[node.index().value()].on_click = callback;
-        }
-    }
-
     #[inline]
     pub fn children(&self, parent: NodeRef) -> ChildrenIter {
         assert!(self.id == parent.tree_id());
