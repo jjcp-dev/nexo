@@ -8,5 +8,5 @@ use super::style::Style;
 pub enum Node {
     Text { content: String, style: Style },
     Element { layout: Layout, style: Style },
-    Component(Box<dyn Component>),
+    // Component(Box<dyn Component>),
 }

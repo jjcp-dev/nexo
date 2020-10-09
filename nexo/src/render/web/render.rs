@@ -36,8 +36,12 @@ impl Renderer {
         }
     }
 
-    pub fn render<T: Component>(&mut self, component: T) {
-        let root = component.render(&mut self.tree, &[]);
+    pub fn tree_mut(&mut self) -> &mut Tree {
+        &mut self.tree
+    }
+
+    pub fn render(&mut self, root: NodeRef) {
+        // let root = component.render(&mut self.tree, &[]);
         let window = web_sys::window().expect("no global `window` exists");
         let document = window.document().expect("should have a document on window");
 

@@ -42,26 +42,25 @@ impl Tree {
     }
 
     pub fn create(&mut self, node: Node, children: &[NodeRef]) -> NodeRef {
-        match node {
-            Node::Component(x) => x.render(self, children),
-            _ => {
-                // TODO: Look for an empty slot to put the new node in.
-                self.nodes.push(node);
-                self.links.push(Link {
-                    parent: Index::null(),
-                    first_child: Index::null(),
-                    last_child: Index::null(),
-                    previous_sibling: Index::null(),
-                    next_sibling: Index::null(),
-                });
+        // match node {
+        //     _ => {
+        // TODO: Look for an empty slot to put the new node in.
+        self.nodes.push(node);
+        self.links.push(Link {
+            parent: Index::null(),
+            first_child: Index::null(),
+            last_child: Index::null(),
+            previous_sibling: Index::null(),
+            next_sibling: Index::null(),
+        });
 
-                let index = Index::new(self.nodes.len() - 1).unwrap();
+        let index = Index::new(self.nodes.len() - 1).unwrap();
 
-                self.connect_children(index, children);
+        self.connect_children(index, children);
 
-                NodeRef::new(index, self.id)
-            }
-        }
+        NodeRef::new(index, self.id)
+        // }
+        // }
     }
 
     #[inline]
