@@ -56,7 +56,6 @@ impl Renderer {
 
     fn set_style(&self, style: &Style, element: &HtmlElement) {
         let s = element.style();
-
         match style.background.color {
             Property::Inherit => (),
             Property::With(x) => {
@@ -79,7 +78,6 @@ impl Renderer {
 
     fn render_node(&self, document: &Document, parent: &HtmlElement, root: NodeRef) {
         let node = self.tree.get(root);
-
         match node {
             Node::Text { content, style } => {
                 let p: HtmlElement = document.create_element("p").unwrap().dyn_into().unwrap();

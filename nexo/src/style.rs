@@ -31,36 +31,6 @@ pub struct Style {
     pub height: Length,
 }
 
-pub struct StyleBuilder {
-    style: Style,
-}
-
-impl StyleBuilder {
-    #[inline]
-    pub fn new() -> StyleBuilder {
-        StyleBuilder {
-            style: Style::new(),
-        }
-    }
-
-    #[inline]
-    pub fn with_bg_color(&mut self, color: Color) -> &mut Self {
-        self.style.background.color = Property::With(color);
-        self
-    }
-
-    #[inline]
-    pub fn with_margin(&mut self, margin: Margin) -> &mut Self {
-        self.style.margin = margin;
-        self
-    }
-
-    #[inline]
-    pub fn build(&self) -> Style {
-        self.style.clone()
-    }
-}
-
 impl Style {
     pub fn new() -> Style {
         Style {
@@ -88,5 +58,53 @@ impl Style {
             width: Length::Auto,
             height: Length::Auto,
         }
+    }
+}
+
+pub struct StyleBuilder {
+    style: Style,
+}
+
+impl StyleBuilder {
+    #[inline]
+    pub fn new() -> StyleBuilder {
+        StyleBuilder {
+            style: Style::new(),
+        }
+    }
+
+    #[inline]
+    pub fn with_bg_color(&mut self, color: Color) -> &mut Self {
+        self.style.background.color = Property::With(color);
+        self
+    }
+
+    #[inline]
+    pub fn with_margin(&mut self, margin: Margin) -> &mut Self {
+        self.style.margin = margin;
+        self
+    }
+
+    #[inline]
+    pub fn with_padding(&mut self, padding: Padding) -> &mut Self {
+        self.style.padding = padding;
+        self
+    }
+
+    #[inline]
+    pub fn with_width(&mut self, width: Length) -> &mut Self {
+        self.style.width = width;
+        self
+    }
+
+    #[inline]
+    pub fn with_height(&mut self, height: Length) -> &mut Self {
+        self.style.height = height;
+        self
+    }
+
+    #[inline]
+    pub fn build(&self) -> Style {
+        self.style.clone()
     }
 }
