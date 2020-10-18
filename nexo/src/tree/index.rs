@@ -90,6 +90,12 @@ mod tests {
     // }
 
     #[test]
+    fn zero_returns_an_index_with_value_zero() {
+        let a = Index::zero();
+        assert_eq!(a.index, 0);
+    }
+
+    #[test]
     fn value_given_an_index_returns_a_usable_index_number() {
         assert_eq!(Index::new(10).unwrap().value(), 10);
         assert_eq!(Index::new(Index::max()).unwrap().value(), Index::max());
