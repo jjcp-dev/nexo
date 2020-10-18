@@ -8,6 +8,7 @@ pub struct Index {
 }
 
 impl Index {
+    #[inline]
     pub fn new(index: usize) -> Option<Index> {
         if index <= Index::max() as usize {
             Some(Index {
@@ -18,24 +19,33 @@ impl Index {
         }
     }
 
+    #[inline]
+    pub fn zero() -> Index {
+        Index { index: 0 }
+    }
+
     // pub unsafe fn new_unchecked(index: usize) -> Index {
     //     Index {
     //         index: index as UInt,
     //     }
     // }
 
+    #[inline]
     pub fn value(&self) -> usize {
         self.index as usize
     }
 
+    #[inline]
     pub fn null() -> Index {
         Index { index: UInt::MAX }
     }
 
+    #[inline]
     pub fn max() -> usize {
         UInt::MAX as usize - 1
     }
 
+    #[inline]
     pub fn is_null(&self) -> bool {
         *self == Index::null()
     }
