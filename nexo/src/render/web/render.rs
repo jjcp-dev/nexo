@@ -25,7 +25,7 @@ impl Renderer {
         Renderer {
             tree: Tree::with_capacity(100),
             class_names: ClassNames::new(String::from("nexo")),
-            current_style: Style::default(),
+            current_style: Style::new(),
             root_element_id: root_id,
         }
     }

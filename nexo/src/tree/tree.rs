@@ -26,7 +26,7 @@ impl Tree {
     pub fn new() -> Tree {
         let root = Node::Element {
             layout: Layout::Column,
-            style: Style::default(),
+            style: Style::new(),
         };
 
         Tree {
@@ -48,7 +48,7 @@ impl Tree {
 
         let root = Node::Element {
             layout: Layout::Column,
-            style: Style::default(),
+            style: Style::new(),
         };
 
         nodes.push(root);

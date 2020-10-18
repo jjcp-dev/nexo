@@ -1,6 +1,6 @@
 use crate::length::Length;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Padding {
     pub top: Length,
     pub right: Length,

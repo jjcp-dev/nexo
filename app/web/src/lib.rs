@@ -19,7 +19,7 @@ use nexo::layout::Layout;
 use nexo::length::Length;
 use nexo::node::Node;
 use nexo::spacing::{Margin, Padding};
-use nexo::style::{Background, BorderRadius, Property, Style};
+use nexo::style::{Background, BorderRadius, Property, Style, StyleBuilder};
 use nexo::tree::{NodeRef, Tree};
 
 // struct App;
@@ -36,56 +36,56 @@ use nexo::tree::{NodeRef, Tree};
 //             tree.create(
 //                 Node::Text {
 //                     content: "Pepe".to_string(),
-//                     style: Style::default(),
+//                     style: Style::new(),
 //                 },
 //                 &[],
 //             ),
 //             tree.create(
 //                 Node::Text {
 //                     content: "Paco".to_string(),
-//                     style: Style::default(),
+//                     style: Style::new(),
 //                 },
 //                 &[],
 //             ),
 //             tree.create(
 //                 Node::Text {
 //                     content: "Pepe".to_string(),
-//                     style: Style::default(),
+//                     style: Style::new(),
 //                 },
 //                 &[],
 //             ),
 //             tree.create(
 //                 Node::Text {
 //                     content: "Paco".to_string(),
-//                     style: Style::default(),
+//                     style: Style::new(),
 //                 },
 //                 &[],
 //             ),
 //             tree.create(
 //                 Node::Text {
 //                     content: "Pepe".to_string(),
-//                     style: Style::default(),
+//                     style: Style::new(),
 //                 },
 //                 &[],
 //             ),
 //             tree.create(
 //                 Node::Text {
 //                     content: "Paco".to_string(),
-//                     style: Style::default(),
+//                     style: Style::new(),
 //                 },
 //                 &[],
 //             ),
 //             tree.create(
 //                 Node::Text {
 //                     content: "Pepe".to_string(),
-//                     style: Style::default(),
+//                     style: Style::new(),
 //                 },
 //                 &[],
 //             ),
 //             tree.create(
 //                 Node::Text {
 //                     content: "Paco".to_string(),
-//                     style: Style::default(),
+//                     style: Style::new(),
 //                 },
 //                 &[],
 //             ),
@@ -94,7 +94,7 @@ use nexo::tree::{NodeRef, Tree};
 //             tree.create(
 //                 Node::Text {
 //                     content: "Hola".to_string(),
-//                     style: Style::default(),
+//                     style: Style::new(),
 //                 },
 //                 &[],
 //             ),
@@ -132,14 +132,14 @@ use nexo::tree::{NodeRef, Tree};
 //             tree.create(
 //                 Node::Text {
 //                     content: "Oi oi oi".to_string(),
-//                     style: Style::default(),
+//                     style: Style::new(),
 //                 },
 //                 &[],
 //             ),
 //             tree.create(
 //                 Node::Element {
 //                     layout: Layout::Column,
-//                     style: Style::default(),
+//                     style: Style::new(),
 //                 },
 //                 &c2,
 //             ),
@@ -198,56 +198,56 @@ pub fn greet() {
     //     tree.create(
     //         Node::Text {
     //             content: "Pepe".to_string(),
-    //             style: Style::default(),
+    //             style: Style::new(),
     //         },
     //         &[],
     //     ),
     //     tree.create(
     //         Node::Text {
     //             content: "Paco".to_string(),
-    //             style: Style::default(),
+    //             style: Style::new(),
     //         },
     //         &[],
     //     ),
     //     tree.create(
     //         Node::Text {
     //             content: "Pepe".to_string(),
-    //             style: Style::default(),
+    //             style: Style::new(),
     //         },
     //         &[],
     //     ),
     //     tree.create(
     //         Node::Text {
     //             content: "Paco".to_string(),
-    //             style: Style::default(),
+    //             style: Style::new(),
     //         },
     //         &[],
     //     ),
     //     tree.create(
     //         Node::Text {
     //             content: "Pepe".to_string(),
-    //             style: Style::default(),
+    //             style: Style::new(),
     //         },
     //         &[],
     //     ),
     //     tree.create(
     //         Node::Text {
     //             content: "Paco".to_string(),
-    //             style: Style::default(),
+    //             style: Style::new(),
     //         },
     //         &[],
     //     ),
     //     tree.create(
     //         Node::Text {
     //             content: "Pepe".to_string(),
-    //             style: Style::default(),
+    //             style: Style::new(),
     //         },
     //         &[],
     //     ),
     //     tree.create(
     //         Node::Text {
     //             content: "Paco".to_string(),
-    //             style: Style::default(),
+    //             style: Style::new(),
     //         },
     //         &[],
     //     ),
@@ -256,7 +256,7 @@ pub fn greet() {
     //     tree.create(
     //         Node::Text {
     //             content: "Hola".to_string(),
-    //             style: Style::default(),
+    //             style: Style::new(),
     //         },
     //         &[],
     //     ),
@@ -294,14 +294,14 @@ pub fn greet() {
     //     tree.create(
     //         Node::Text {
     //             content: "Oi oi oi LALA".to_string(),
-    //             style: Style::default(),
+    //             style: Style::new(),
     //         },
     //         &[],
     //     ),
     //     tree.create(
     //         Node::Element {
     //             layout: Layout::Column,
-    //             style: Style::default(),
+    //             style: Style::new(),
     //         },
     //         &c2,
     //     ),
@@ -342,7 +342,7 @@ pub fn greet() {
         root,
         Node::Element {
             layout: Layout::Row,
-            style: Style::default(),
+            style: Style::new(),
         },
     );
 
@@ -350,7 +350,7 @@ pub fn greet() {
         row,
         Node::Text {
             content: "Hola".into(),
-            style: Style::default(),
+            style: Style::new(),
         },
     );
 
@@ -358,14 +358,14 @@ pub fn greet() {
         row,
         Node::Text {
             content: "Pepe".into(),
-            style: Style::default(),
+            style: Style::new(),
         },
     );
     tree.create(
         row,
         Node::Text {
             content: "Hola".into(),
-            style: Style::default(),
+            style: Style::new(),
         },
     );
 
@@ -373,28 +373,31 @@ pub fn greet() {
         row,
         Node::Element {
             layout: Layout::Column,
-            style: Style::default(),
+            style: Style::new(),
         },
     );
     tree.create(
         col,
         Node::Text {
             content: "Hola".into(),
-            style: Style::default(),
+            style: Style::new(),
         },
     );
     tree.create(
         col,
         Node::Text {
             content: "Hola".into(),
-            style: Style::default(),
+            style: Style::new(),
         },
     );
     tree.create(
         col,
         Node::Text {
             content: "Hola".into(),
-            style: Style::default(),
+            style: StyleBuilder::new()
+                .with_bg_color(Color::rgb(255, 0, 255))
+                .with_margin(Margin::left(Length::Dots(10)))
+                .build(),
         },
     );
     renderer.render(root);

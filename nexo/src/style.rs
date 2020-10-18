@@ -2,18 +2,18 @@ use super::color::Color;
 use super::length::Length;
 use super::spacing::{Margin, Padding};
 
-#[derive(Debug, Eq, PartialEq)]
+#[derive(Debug, Clone, Eq, PartialEq)]
 pub enum Property<T> {
     Inherit,
     With(T),
 }
 
-#[derive(Debug, Eq, PartialEq)]
+#[derive(Debug, Clone, Eq, PartialEq)]
 pub struct Background {
     pub color: Property<Color>,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct BorderRadius {
     pub top_left: Length,
     pub top_right: Length,
@@ -21,7 +21,7 @@ pub struct BorderRadius {
     pub bottom_right: Length,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Style {
     pub background: Background,
     pub margin: Margin,
@@ -31,8 +31,38 @@ pub struct Style {
     pub height: Length,
 }
 
+pub struct StyleBuilder {
+    style: Style,
+}
+
+impl StyleBuilder {
+    #[inline]
+    pub fn new() -> StyleBuilder {
+        StyleBuilder {
+            style: Style::new(),
+        }
+    }
+
+    #[inline]
+    pub fn with_bg_color(&mut self, color: Color) -> &mut Self {
+        self.style.background.color = Property::With(color);
+        self
+    }
+
+    #[inline]
+    pub fn with_margin(&mut self, margin: Margin) -> &mut Self {
+        self.style.margin = margin;
+        self
+    }
+
+    #[inline]
+    pub fn build(&self) -> Style {
+        self.style.clone()
+    }
+}
+
 impl Style {
-    pub fn default() -> Style {
+    pub fn new() -> Style {
         Style {
             background: Background {
                 color: Property::With(Color::white()),
