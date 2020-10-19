@@ -99,7 +99,6 @@ impl Renderer {
                 self.render_children(document, &mut div, root);
                 parent.append_child(&div).unwrap();
             }
-            _ => (),
         }
     }
 }
