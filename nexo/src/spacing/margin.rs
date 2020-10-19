@@ -9,7 +9,7 @@ pub struct Margin {
 }
 
 impl Margin {
-    pub fn new(len: Length) -> Margin {
+    pub fn all(len: Length) -> Margin {
         Margin {
             top: len,
             right: len,
@@ -55,6 +55,26 @@ impl Margin {
             right: Length::Dots(0),
             bottom: Length::Dots(0),
             left: len,
+        }
+    }
+
+    #[inline]
+    pub fn horizontal(len: Length) -> Margin {
+        Margin {
+            top: Length::Dots(0),
+            right: len,
+            bottom: Length::Dots(0),
+            left: len,
+        }
+    }
+
+    #[inline]
+    pub fn vertical(len: Length) -> Margin {
+        Margin {
+            top: len,
+            right: Length::Dots(0),
+            bottom: len,
+            left: Length::Dots(0),
         }
     }
 }

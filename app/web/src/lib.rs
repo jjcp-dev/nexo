@@ -22,6 +22,72 @@ use nexo::spacing::{Margin, Padding};
 use nexo::style::{Background, BorderRadius, Property, Style, StyleBuilder};
 use nexo::tree::{NodeRef, Tree};
 
+fn render_bla(tree: &mut Tree, parent: NodeRef) {
+    let col = tree.create(
+        parent,
+        Node::Element {
+            layout: Layout::Column,
+            style: Style::new(),
+        },
+    );
+    tree.create(
+        col,
+        Node::Text {
+            content: "Hola".into(),
+            style: Style::new(),
+        },
+    );
+    tree.create(
+        col,
+        Node::Text {
+            content: "Hola".into(),
+            style: Style::new(),
+        },
+    );
+    tree.create(
+        col,
+        Node::Text {
+            content: "Blabla".into(),
+            style: StyleBuilder::new()
+                .with_bg_color(Color::rgb(255, 0, 255))
+                .with_margin(Margin::left(Length::Dots(10)))
+                .build(),
+        },
+    );
+}
+
+fn panel(tree: &mut Tree, parent: NodeRef) {
+    let row = tree.create(
+        parent,
+        Node::Element {
+            layout: Layout::Row,
+            style: StyleBuilder::new()
+                .with_bg_color(Color::rgb(120, 120, 0))
+                .build(),
+        },
+    );
+
+    tree.create(
+        row,
+        Node::Text {
+            content: "Services".into(),
+            style: StyleBuilder::new()
+                .with_margin(Margin::horizontal(Length::Dots(5)))
+                .build(),
+        },
+    );
+
+    tree.create(
+        row,
+        Node::Text {
+            content: "About Us".into(),
+            style: StyleBuilder::new()
+                .with_margin(Margin::horizontal(Length::Dots(5)))
+                .build(),
+        },
+    );
+}
+
 #[wasm_bindgen]
 pub fn greet() {
     use nexo::render::web::Renderer;
@@ -62,36 +128,8 @@ pub fn greet() {
         },
     );
 
-    let col = tree.create(
-        row,
-        Node::Element {
-            layout: Layout::Column,
-            style: Style::new(),
-        },
-    );
-    tree.create(
-        col,
-        Node::Text {
-            content: "Hola".into(),
-            style: Style::new(),
-        },
-    );
-    tree.create(
-        col,
-        Node::Text {
-            content: "Hola".into(),
-            style: Style::new(),
-        },
-    );
-    tree.create(
-        col,
-        Node::Text {
-            content: "Hola".into(),
-            style: StyleBuilder::new()
-                .with_bg_color(Color::rgb(255, 0, 255))
-                .with_margin(Margin::left(Length::Dots(10)))
-                .build(),
-        },
-    );
+    render_bla(tree, row);
+    panel(tree, root);
+
     renderer.render(root);
 }
