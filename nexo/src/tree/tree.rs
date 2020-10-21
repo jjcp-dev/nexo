@@ -4,7 +4,7 @@ use super::index::Index;
 use super::node_ref::NodeRef;
 use super::tree_id::TreeId;
 
-use crate::layout::Layout;
+use crate::layout::{Align, Layout};
 use crate::node::Node;
 use crate::style::Style;
 
@@ -25,7 +25,10 @@ struct Link {
 impl Tree {
     pub fn new() -> Tree {
         let root = Node::Element {
-            layout: Layout::Column,
+            layout: Layout::Column {
+                main_axis: Align::Stretch,
+                cross_axis: Align::Start,
+            },
             style: Style::new(),
         };
 
@@ -47,7 +50,10 @@ impl Tree {
         let mut links: Vec<Link> = Vec::with_capacity(capacity);
 
         let root = Node::Element {
-            layout: Layout::Column,
+            layout: Layout::Column {
+                main_axis: Align::Stretch,
+                cross_axis: Align::Start,
+            },
             style: Style::new(),
         };
 

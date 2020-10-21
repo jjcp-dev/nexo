@@ -15,7 +15,7 @@ extern "C" {
 
 use nexo::color::Color;
 use nexo::component::Component;
-use nexo::layout::Layout;
+use nexo::layout::{Align, Layout};
 use nexo::length::Length;
 use nexo::node::Node;
 use nexo::spacing::{Margin, Padding};
@@ -26,7 +26,10 @@ fn render_bla(tree: &mut Tree, parent: NodeRef) {
     let col = tree.create(
         parent,
         Node::Element {
-            layout: Layout::Column,
+            layout: Layout::Column {
+                main_axis: Align::Stretch,
+                cross_axis: Align::Start,
+            },
             style: Style::new(),
         },
     );
@@ -60,9 +63,13 @@ fn panel(tree: &mut Tree, parent: NodeRef) {
     let row = tree.create(
         parent,
         Node::Element {
-            layout: Layout::Row,
+            layout: Layout::Row {
+                main_axis: Align::End,
+                cross_axis: Align::Start,
+            },
             style: StyleBuilder::new()
                 .with_bg_color(Color::rgb(120, 120, 0))
+                .with_width(Length::Auto)
                 .build(),
         },
     );
@@ -100,7 +107,10 @@ pub fn greet() {
     let row = tree.create(
         root,
         Node::Element {
-            layout: Layout::Row,
+            layout: Layout::Row {
+                main_axis: Align::Stretch,
+                cross_axis: Align::Start,
+            },
             style: Style::new(),
         },
     );

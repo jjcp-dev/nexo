@@ -1,7 +1,7 @@
 use std::fmt::Write;
 
 use crate::component::Component;
-use crate::layout::Layout;
+use crate::layout::{Align, Layout};
 use crate::length::Length;
 use crate::node::Node;
 use crate::style::{Background, Property, Style};
@@ -76,6 +76,24 @@ impl Renderer {
             .unwrap();
     }
 
+    fn justify_align(&self, a: &Align) -> &str {
+        match a {
+            Align::Start => "nexo-justify-start",
+            Align::Center => "nexo-justify-center",
+            Align::End => "nexo-justify-end",
+            Align::Stretch => "",
+        }
+    }
+
+    fn align_align(&self, a: &Align) -> &str {
+        match a {
+            Align::Start => "nexo-align-start",
+            Align::Center => "nexo-align-center",
+            Align::End => "nexo-align-end",
+            Align::Stretch => "",
+        }
+    }
+
     fn render_node(&self, document: &Document, parent: &HtmlElement, root: NodeRef) {
         let node = self.tree.get(root);
         match node {
@@ -88,13 +106,27 @@ impl Renderer {
 
             Node::Element { style, layout } => {
                 let classes = match layout {
-                    Layout::Row => "nexo-flex-row",
-                    Layout::Column => "nexo-flex-col",
+                    Layout::Row {
+                        main_axis,
+                        cross_axis,
+                    } => (
+                        "nexo-flex-row",
+                        self.justify_align(main_axis),
+                        self.align_align(cross_axis),
+                    ),
+                    Layout::Column {
+                        main_axis,
+                        cross_axis,
+                    } => (
+                        "nexo-flex-col",
+                        self.justify_align(main_axis),
+                        self.align_align(cross_axis),
+                    ),
                 };
 
                 let mut div: HtmlElement =
                     document.create_element("div").unwrap().dyn_into().unwrap();
-                div.set_class_name(classes);
+                div.set_class_name(format!("{} {} {}", classes.0, classes.1, classes.2).as_str());
                 self.set_style(&style, &div);
                 self.render_children(document, &mut div, root);
                 parent.append_child(&div).unwrap();
