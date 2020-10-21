@@ -64,12 +64,12 @@ fn panel(tree: &mut Tree, parent: NodeRef) {
         parent,
         Node::Element {
             layout: Layout::Row {
-                main_axis: Align::End,
-                cross_axis: Align::Start,
+                main_axis: Align::Start,
+                cross_axis: Align::Center,
             },
             style: StyleBuilder::new()
                 .with_bg_color(Color::rgb(120, 120, 0))
-                .with_width(Length::Auto)
+                .with_height(Length::Dots(50))
                 .build(),
         },
     );
