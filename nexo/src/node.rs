@@ -10,4 +10,18 @@ pub enum Node {
     Text { content: String, style: Style },
     Element { layout: Layout, style: Style },
     // Component(Box<dyn Component>),
+    /*
+      Container {
+          Row,
+          Column
+      }
+      Layout {
+          ...
+      }
+      Item {
+          container: Container
+          layout: Layout
+          style: Style
+      }
+    */
 }
