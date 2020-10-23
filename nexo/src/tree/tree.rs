@@ -12,6 +12,7 @@ pub struct Tree {
     id: TreeId,
     nodes: Vec<Node>,
     links: Vec<Link>,
+    listen: Vec<ListenTo>,
 }
 
 struct Link {
@@ -20,6 +21,17 @@ struct Link {
     last_child: Index,
     previous_sibling: Index,
     next_sibling: Index,
+}
+
+// FIXME: This must not be here.
+pub struct ListenTo {
+    pub click: bool,
+}
+
+impl ListenTo {
+    pub fn new() -> ListenTo {
+        ListenTo { click: false }
+    }
 }
 
 impl Tree {
@@ -42,12 +54,14 @@ impl Tree {
                 previous_sibling: Index::null(),
                 next_sibling: Index::null(),
             }],
+            listen: vec![ListenTo::new()],
         }
     }
 
     pub fn with_capacity(capacity: usize) -> Tree {
         let mut nodes: Vec<Node> = Vec::with_capacity(capacity);
         let mut links: Vec<Link> = Vec::with_capacity(capacity);
+        let mut listen: Vec<ListenTo> = Vec::with_capacity(capacity);
 
         let root = Node::Element {
             layout: Layout::Column {
@@ -65,11 +79,13 @@ impl Tree {
             previous_sibling: Index::null(),
             next_sibling: Index::null(),
         });
+        listen.push(ListenTo::new());
 
         Tree {
             id: TreeId::new().unwrap(),
             nodes: nodes,
             links: links,
+            listen: listen,
         }
     }
 
@@ -78,7 +94,7 @@ impl Tree {
         NodeRef::new(Index::zero(), self.id)
     }
 
-    pub fn create(&mut self, parent: NodeRef, node: Node) -> NodeRef {
+    pub fn create(&mut self, parent: NodeRef, node: Node, listen_to: ListenTo) -> NodeRef {
         // FIXME: Add error messages.
         assert!(parent.tree_id() == self.id);
         assert!(!parent.index().is_null());
@@ -106,6 +122,7 @@ impl Tree {
             previous_sibling: last_child,
             next_sibling: Index::null(),
         });
+        self.listen.push(listen_to);
 
         NodeRef::new(node_index, self.id)
     }
@@ -125,6 +142,13 @@ impl Tree {
         assert!(self.id == node.tree_id());
 
         &self.nodes[node.value()]
+    }
+
+    #[inline]
+    pub fn get_listen(&self, node: NodeRef) -> &ListenTo {
+        assert!(self.id == node.tree_id());
+
+        &self.listen[node.value()]
     }
 }
 

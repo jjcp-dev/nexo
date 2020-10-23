@@ -20,7 +20,7 @@ use nexo::length::Length;
 use nexo::node::Node;
 use nexo::spacing::{Margin, Padding};
 use nexo::style::{Background, BorderRadius, Property, Style, StyleBuilder};
-use nexo::tree::{NodeRef, Tree};
+use nexo::tree::{ListenTo, NodeRef, Tree};
 
 fn render_bla(tree: &mut Tree, parent: NodeRef) {
     let col = tree.create(
@@ -32,6 +32,7 @@ fn render_bla(tree: &mut Tree, parent: NodeRef) {
             },
             style: Style::new(),
         },
+        ListenTo { click: true },
     );
     tree.create(
         col,
@@ -39,6 +40,7 @@ fn render_bla(tree: &mut Tree, parent: NodeRef) {
             content: "Hola".into(),
             style: Style::new(),
         },
+        ListenTo::new(),
     );
     tree.create(
         col,
@@ -46,6 +48,7 @@ fn render_bla(tree: &mut Tree, parent: NodeRef) {
             content: "Hola".into(),
             style: Style::new(),
         },
+        ListenTo::new(),
     );
     tree.create(
         col,
@@ -56,6 +59,7 @@ fn render_bla(tree: &mut Tree, parent: NodeRef) {
                 .with_margin(Margin::left(Length::Dots(10)))
                 .build(),
         },
+        ListenTo::new(),
     );
 }
 
@@ -72,6 +76,7 @@ fn panel(tree: &mut Tree, parent: NodeRef) {
                 .with_height(Length::Dots(50))
                 .build(),
         },
+        ListenTo { click: true },
     );
 
     tree.create(
@@ -82,6 +87,7 @@ fn panel(tree: &mut Tree, parent: NodeRef) {
                 .with_margin(Margin::horizontal(Length::Dots(5)))
                 .build(),
         },
+        ListenTo::new(),
     );
 
     tree.create(
@@ -92,6 +98,7 @@ fn panel(tree: &mut Tree, parent: NodeRef) {
                 .with_margin(Margin::horizontal(Length::Dots(5)))
                 .build(),
         },
+        ListenTo::new(),
     );
 }
 
@@ -113,6 +120,7 @@ pub fn greet() {
             },
             style: Style::new(),
         },
+        ListenTo::new(),
     );
 
     tree.create(
@@ -121,6 +129,7 @@ pub fn greet() {
             content: "Hola".into(),
             style: Style::new(),
         },
+        ListenTo::new(),
     );
 
     tree.create(
@@ -129,6 +138,7 @@ pub fn greet() {
             content: "Pepe".into(),
             style: Style::new(),
         },
+        ListenTo::new(),
     );
     tree.create(
         row,
@@ -136,6 +146,7 @@ pub fn greet() {
             content: "Hola".into(),
             style: Style::new(),
         },
+        ListenTo::new(),
     );
 
     render_bla(tree, row);

@@ -96,12 +96,23 @@ impl Renderer {
 
     fn render_node(&self, document: &Document, parent: &HtmlElement, root: NodeRef) {
         let node = self.tree.get(root);
+        let listen = self.tree.get_listen(root);
+
         match node {
             Node::Text { content, style } => {
                 let p: HtmlElement = document.create_element("p").unwrap().dyn_into().unwrap();
                 p.set_inner_html(content);
                 self.set_style(&style, &p);
                 parent.append_child(&p).unwrap();
+                if listen.click {
+                    p.set_onmousedown(Some(&js_sys::Function::new_no_args(
+                        format!("do_something({});", root.value()).as_str(),
+                    )));
+                }
+                web_sys::console::log(&js_sys::Array::of2(
+                    &wasm_bindgen::JsValue::from_str("C"),
+                    &wasm_bindgen::JsValue::from_bool(listen.click),
+                ));
             }
 
             Node::Element { style, layout } => {
@@ -129,6 +140,15 @@ impl Renderer {
                 div.set_class_name(format!("{} {} {}", classes.0, classes.1, classes.2).as_str());
                 self.set_style(&style, &div);
                 self.render_children(document, &mut div, root);
+                if listen.click {
+                    div.set_onmousedown(Some(&js_sys::Function::new_no_args(
+                        format!("do_something({});", root.value()).as_str(),
+                    )));
+                }
+                web_sys::console::log(&js_sys::Array::of2(
+                    &wasm_bindgen::JsValue::from_str("C"),
+                    &wasm_bindgen::JsValue::from_bool(listen.click),
+                ));
                 parent.append_child(&div).unwrap();
             }
         }
