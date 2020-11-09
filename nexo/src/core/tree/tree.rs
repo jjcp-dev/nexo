@@ -4,9 +4,9 @@ use super::index::Index;
 use super::node_ref::NodeRef;
 use super::tree_id::TreeId;
 
-use crate::layout::{Align, Layout};
-use crate::node::Node;
-use crate::style::Style;
+use crate::core::layout::{Align, Layout};
+use crate::core::node::Node;
+use crate::core::style::Style;
 
 pub struct Tree {
     id: TreeId,

@@ -1,6 +1,6 @@
 use std::fmt;
 
-use crate::color::Color;
+use crate::core::style::Color;
 use crate::justify::Justify;
 use crate::length::Length;
 use crate::spacing::{Margin, Padding};

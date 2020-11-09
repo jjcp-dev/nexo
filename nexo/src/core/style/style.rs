@@ -1,32 +1,14 @@
 use super::color::Color;
-use super::length::Length;
-use super::spacing::{Margin, Padding};
+use crate::core::length::Length;
 
-#[derive(Debug, Clone, Eq, PartialEq)]
-pub enum Property<T> {
-    Inherit,
-    With(T),
-}
+use super::{Background, Border, Margin, Padding, Property};
 
-#[derive(Debug, Clone, Eq, PartialEq)]
-pub struct Background {
-    pub color: Property<Color>,
-}
-
-#[derive(Debug, Clone)]
-pub struct BorderRadius {
-    pub top_left: Length,
-    pub top_right: Length,
-    pub bottom_left: Length,
-    pub bottom_right: Length,
-}
-
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct Style {
     pub background: Background,
     pub margin: Margin,
     pub padding: Padding,
-    pub radius: BorderRadius,
+    pub border: Border,
     pub width: Length,
     pub height: Length,
 }
@@ -35,26 +17,18 @@ impl Style {
     pub fn new() -> Style {
         Style {
             background: Background {
-                color: Property::With(Color::white()),
+                color: Property::Inherit,
+                image: "file://".into(),
             },
-            margin: Margin {
-                top: Length::Dots(0),
-                right: Length::Dots(0),
-                bottom: Length::Dots(0),
-                left: Length::Dots(0),
-            },
-            padding: Padding {
-                top: Length::Dots(0),
-                right: Length::Dots(0),
-                bottom: Length::Dots(0),
-                left: Length::Dots(0),
-            },
-            radius: BorderRadius {
-                top_left: Length::Dots(0),
-                top_right: Length::Dots(0),
-                bottom_left: Length::Dots(0),
-                bottom_right: Length::Dots(0),
-            },
+            margin: Margin::new(),
+            padding: Padding::new(),
+            border: Border {},
+            // radius: BorderRadius {
+            //     top_left: Length::Dots(0),
+            //     top_right: Length::Dots(0),
+            //     bottom_left: Length::Dots(0),
+            //     bottom_right: Length::Dots(0),
+            // },
             width: Length::Auto,
             height: Length::Auto,
         }
