@@ -1,6 +1,7 @@
 mod utils;
 
 use wasm_bindgen::prelude::*;
+use wasm_bindgen::JsCast;
 
 // When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
 // allocator.
@@ -15,8 +16,43 @@ use nexo::core::style::*;
 use nexo::core::tree::{ListenTo, Tree};
 
 #[wasm_bindgen]
+pub struct NexoApp {
+    tree: Tree,
+    renderer: WebRenderer,
+    c: JsValue,
+}
+
+#[wasm_bindgen]
+impl NexoApp {
+    pub fn new() -> NexoApp {
+        NexoApp {
+            tree: Tree::new(),
+            renderer: WebRenderer::new(),
+            c: JsValue::null(),
+        }
+    }
+
+    pub fn hola(&self) {
+        // web_sys::console::log(&js_sys::Array::of1(&wasm_bindgen::JsValue::from_str(
+        //     "Hola!",
+        // )));
+    }
+
+    pub fn set(&mut self, cb: JsValue) {
+        // self.c = cb;
+        cb.dyn_ref::<js_sys::Function>()
+            .unwrap()
+            .call0(&JsValue::null())
+            .unwrap();
+    }
+}
+
+#[wasm_bindgen]
 pub fn greet() {
     let mut tree = Tree::new();
+    let mut events = nexo::core::render::web::Events {
+        events: std::vec::Vec::new(),
+    };
     let renderer = WebRenderer::new();
     let root = tree.root();
 
@@ -29,10 +65,10 @@ pub fn greet() {
                 .with_padding(Padding::all(Length::Dots(10)))
                 .build(),
         },
-        ListenTo::new(),
+        ListenTo { click: true },
     );
 
-    renderer.render(&tree);
+    renderer.render(&tree, std::rc::Rc::new(std::cell::RefCell::new(events)));
 }
 
 // use nexo::color::Color;

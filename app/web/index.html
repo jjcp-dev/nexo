@@ -195,7 +195,7 @@
     // will "boot" the module and make it ready to use. Currently browsers
     // don't support natively imported WebAssembly as an ES module, but
     // eventually the manual initialization won't be required!
-    import init, { greet } from './pkg/web.js';
+    import init, { greet, NexoApp } from './pkg/web.js';
 
     async function run() {
       // First up we need to actually load the wasm file, so we use the
@@ -225,6 +225,13 @@
       // exports which is the same as importing the `*_bg` module in other
       // modes
       await init();
+      // let nexoApp = NexoApp.new();
+      // // nexoApp.hola();
+      // nexoApp.set(() => {
+      //   console.log('Callback');
+      //   nexoApp.hola();
+      // })
+      // console.log('A');
       greet();
       // const h = Hola.new("nexo-root");
       // window.pepe = function pepe() {

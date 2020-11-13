@@ -1,5 +1,8 @@
+use std::cell::RefCell;
 use std::fmt;
+use std::rc::Rc;
 
+use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsCast;
 use web_sys::{Document, HtmlElement};
 
@@ -7,6 +10,8 @@ use crate::core::length::Length;
 use crate::core::node::Node;
 use crate::core::style::Style;
 use crate::core::tree::{NodeRef, Tree};
+
+use super::Events;
 
 pub struct WebRenderer {
     root_element_id: String,
@@ -19,7 +24,7 @@ impl WebRenderer {
         }
     }
 
-    pub fn render(&self, tree: &Tree) {
+    pub fn render(&self, tree: &Tree, events: Rc<RefCell<Events>>) {
         let window = web_sys::window().expect("Missing `window` object");
         let document = window.document().expect("Missing `document` on `window`");
 
@@ -29,17 +34,19 @@ impl WebRenderer {
             .dyn_into()
             .unwrap();
 
-        self.render_node(tree, tree.root(), &document, &nexo_root);
+        self.render_node(tree, events, tree.root(), &document, &nexo_root);
     }
 
     pub fn render_node(
         &self,
         tree: &Tree,
+        events: Rc<RefCell<Events>>,
         node_ref: NodeRef,
         document: &Document,
         parent: &HtmlElement,
     ) {
         let node = tree.get(node_ref);
+        let listen = tree.get_listen(node_ref);
 
         match node {
             Node::Text { content, style } => {
@@ -47,6 +54,28 @@ impl WebRenderer {
 
                 self.set_style(&p, &style);
                 p.set_inner_text(content);
+
+                if listen.click {
+                    {
+                        let k = events.clone();
+                        let c = Closure::wrap(Box::new(move || {
+                            k.borrow_mut().events.push(100);
+                            let size = k.borrow().events.len();
+                            web_sys::console::log(&js_sys::Array::of2(
+                                &wasm_bindgen::JsValue::from_str("Size:"),
+                                &wasm_bindgen::JsValue::from_f64(size as f64),
+                            ));
+                            for i in k.borrow().events.iter() {
+                                web_sys::console::log(&js_sys::Array::of1(
+                                    &wasm_bindgen::JsValue::from_f64(*i as f64),
+                                ));
+                            }
+                        }) as Box<dyn FnMut()>);
+                        p.set_onclick(Some(c.as_ref().unchecked_ref()));
+                        c.forget();
+                    }
+                    p.set_id(&node_ref.value().to_string());
+                }
 
                 parent.append_child(&p).unwrap();
 
@@ -66,19 +95,20 @@ impl WebRenderer {
                 //     &wasm_bindgen::JsValue::from_bool(listen.click),
                 // ));
             }
-            _ => (self.render_children(tree, node_ref, document, parent)),
+            _ => (self.render_children(tree, events, node_ref, document, parent)),
         }
     }
 
     fn render_children(
         &self,
         tree: &Tree,
+        events: Rc<RefCell<Events>>,
         root: NodeRef,
         document: &Document,
         parent: &HtmlElement,
     ) {
         for (_, node_ref) in tree.children(root) {
-            self.render_node(tree, node_ref, document, parent);
+            self.render_node(tree, events.clone(), node_ref, document, parent);
         }
     }
 
