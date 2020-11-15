@@ -58,20 +58,23 @@ impl WebRenderer {
                 if listen.click {
                     {
                         let k = events.clone();
-                        let c = Closure::wrap(Box::new(move || {
+                        let event_listener = Box::new(move |event: web_sys::MouseEvent| {
                             k.borrow_mut().events.push(100);
                             let size = k.borrow().events.len();
-                            web_sys::console::log(&js_sys::Array::of2(
+                            web_sys::console::log(&js_sys::Array::of3(
                                 &wasm_bindgen::JsValue::from_str("Size:"),
                                 &wasm_bindgen::JsValue::from_f64(size as f64),
+                                &wasm_bindgen::JsValue::from_f64(event.buttons() as f64),
                             ));
                             for i in k.borrow().events.iter() {
                                 web_sys::console::log(&js_sys::Array::of1(
                                     &wasm_bindgen::JsValue::from_f64(*i as f64),
                                 ));
                             }
-                        }) as Box<dyn FnMut()>);
-                        p.set_onclick(Some(c.as_ref().unchecked_ref()));
+                        });
+                        let c =
+                            Closure::wrap(event_listener as Box<dyn FnMut(web_sys::MouseEvent)>);
+                        p.set_onmousedown(Some(c.as_ref().unchecked_ref()));
                         c.forget();
                     }
                     p.set_id(&node_ref.value().to_string());
