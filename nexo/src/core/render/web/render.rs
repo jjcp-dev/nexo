@@ -6,6 +6,7 @@ use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsCast;
 use web_sys::{Document, HtmlElement};
 
+use crate::core::event::Event;
 use crate::core::length::Length;
 use crate::core::node::Node;
 use crate::core::style::Style;
@@ -59,16 +60,19 @@ impl WebRenderer {
                     {
                         let k = events.clone();
                         let event_listener = Box::new(move |event: web_sys::MouseEvent| {
-                            k.borrow_mut().events.push(100);
+                            k.borrow_mut().events.push(Event::Click {
+                                x: event.x() as i16,
+                                y: event.y() as i16,
+                            });
                             let size = k.borrow().events.len();
-                            web_sys::console::log(&js_sys::Array::of3(
-                                &wasm_bindgen::JsValue::from_str("Size:"),
-                                &wasm_bindgen::JsValue::from_f64(size as f64),
-                                &wasm_bindgen::JsValue::from_f64(event.buttons() as f64),
-                            ));
+                            // web_sys::console::log(&js_sys::Array::of3(
+                            //     &wasm_bindgen::JsValue::from_str("Size:"),
+                            //     &wasm_bindgen::JsValue::from_f64(size as f64),
+                            //     &wasm_bindgen::JsValue::from_f64(event.buttons() as f64),
+                            // ));
                             for i in k.borrow().events.iter() {
                                 web_sys::console::log(&js_sys::Array::of1(
-                                    &wasm_bindgen::JsValue::from_f64(*i as f64),
+                                    &wasm_bindgen::JsValue::from_str(&format!("{:?}", i)),
                                 ));
                             }
                         });

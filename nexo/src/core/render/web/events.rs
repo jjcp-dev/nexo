@@ -1,5 +1,7 @@
 use std::vec::Vec;
 
+use crate::core::event::Event;
+
 pub struct Events {
-    pub events: Vec<i32>,
+    pub events: Vec<Event>,
 }
