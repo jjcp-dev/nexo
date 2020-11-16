@@ -67,6 +67,17 @@ pub fn greet() {
         },
         ListenTo { click: true },
     );
+    tree.create(
+        root,
+        Node::Text {
+            content: "Hola<b>HOLA 2</b>".into(),
+            style: StyleBuilder::new()
+                // .with_margin(Margin::all(Length::Dots(30)))
+                // .with_padding(Padding::all(Length::Dots(10)))
+                .build(),
+        },
+        ListenTo { click: false },
+    );
 
     renderer.render(&tree, std::rc::Rc::new(std::cell::RefCell::new(events)));
 }
