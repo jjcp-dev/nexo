@@ -1,14 +1,13 @@
 use super::color::Color;
 use crate::core::length::Length;
 
-use super::{Background, Border, Margin, Padding, Property};
+use super::{Background, Margin, Padding, Property};
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct Style {
     pub background: Background,
     pub margin: Margin,
     pub padding: Padding,
-    pub border: Border,
     pub width: Length,
     pub height: Length,
 }
@@ -16,21 +15,13 @@ pub struct Style {
 impl Style {
     pub fn new() -> Style {
         Style {
-            background: Background {
-                color: Property::Inherit,
-                image: "file://".into(),
-            },
+            background: Background::new(),
             margin: Margin::new(),
             padding: Padding::new(),
-            border: Border {},
-            // radius: BorderRadius {
-            //     top_left: Length::Dots(0),
-            //     top_right: Length::Dots(0),
-            //     bottom_left: Length::Dots(0),
-            //     bottom_right: Length::Dots(0),
-            // },
             width: Length::Auto,
             height: Length::Auto,
+            // border: Border {},
+            // clip_path: ClipPath
         }
     }
 }
@@ -50,6 +41,12 @@ impl StyleBuilder {
     #[inline]
     pub fn with_bg_color(&mut self, color: Color) -> &mut Self {
         self.style.background.color = Property::With(color);
+        self
+    }
+
+    #[inline]
+    pub fn with_bg_image(&mut self, src: String) -> &mut Self {
+        self.style.background.image = src;
         self
     }
 

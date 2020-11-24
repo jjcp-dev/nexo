@@ -10,7 +10,7 @@ use crate::core::event::Event;
 use crate::core::layout::{Align, Layout};
 use crate::core::length::Length;
 use crate::core::node::Node;
-use crate::core::style::Style;
+use crate::core::style::{Color, Property, Style};
 use crate::core::tree::{NodeRef, Tree};
 
 use super::Events;
@@ -171,13 +171,21 @@ impl WebRenderer {
                 .unwrap();
         }
 
-        // match style.background.color {
-        //     Property::Inherit => (),
-        //     Property::With(x) => {
-        //         s.set_property("background-color", &format!("{}", x))
-        //             .unwrap();
-        //     }
-        // }
+        match style.background.color {
+            Property::Inherit => (),
+            Property::With(x) => {
+                s.set_property("background-color", &format!("{}", x))
+                    .unwrap();
+            }
+        }
+
+        if style.background.image != "" {
+            s.set_property(
+                "background-image",
+                &format!("url({:?})", style.background.image),
+            )
+            .unwrap();
+        }
     }
 
     #[inline]
@@ -214,5 +222,11 @@ impl fmt::Display for Length {
             Length::Dots(x) => write!(f, "{}px", x),
             Length::Auto => write!(f, "auto"),
         }
+    }
+}
+
+impl fmt::Display for Color {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "#{:08X}", self.value())
     }
 }

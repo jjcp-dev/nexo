@@ -28,6 +28,8 @@ pub struct ListenTo {
     pub click: bool,
 }
 
+// pub struct EventEmitter
+
 impl ListenTo {
     pub fn new() -> ListenTo {
         ListenTo { click: false }
