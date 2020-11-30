@@ -13,7 +13,7 @@ use nexo::core::length::Length;
 use nexo::core::node::Node;
 use nexo::core::render::web::WebRenderer;
 use nexo::core::style::*;
-use nexo::core::tree::{ListenTo, Tree};
+use nexo::core::tree::{EmitterConfig, Tree};
 
 #[wasm_bindgen]
 pub struct NexoApp {
@@ -66,7 +66,7 @@ pub fn greet() {
                 .with_bg_image("https://image.shutterstock.com/image-vector/abstract-futuristic-landscape-1980s-style-260nw-1139046833.jpg".into())
                 .build(),
         },
-        ListenTo { click: true },
+        EmitterConfig { click: true },
     );
     tree.create(
         root,
@@ -78,7 +78,7 @@ pub fn greet() {
                 // .with_padding(Padding::all(Length::Dots(10)))
                 .build(),
         },
-        ListenTo { click: false },
+        EmitterConfig { click: false },
     );
 
     renderer.render(&tree, std::rc::Rc::new(std::cell::RefCell::new(events)));

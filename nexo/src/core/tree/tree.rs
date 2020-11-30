@@ -8,11 +8,21 @@ use crate::core::layout::{Align, Layout};
 use crate::core::node::Node;
 use crate::core::style::Style;
 
+pub struct EmitterConfig {
+    pub click: bool,
+}
+
+impl EmitterConfig {
+    pub fn new() -> EmitterConfig {
+        EmitterConfig { click: false }
+    }
+}
+
 pub struct Tree {
     id: TreeId,
     nodes: Vec<Node>,
     links: Vec<Link>,
-    listen: Vec<ListenTo>,
+    emitter_config: Vec<EmitterConfig>,
 }
 
 struct Link {
@@ -21,19 +31,6 @@ struct Link {
     last_child: Index,
     previous_sibling: Index,
     next_sibling: Index,
-}
-
-// FIXME: This must not be here.
-pub struct ListenTo {
-    pub click: bool,
-}
-
-// pub struct EventEmitter
-
-impl ListenTo {
-    pub fn new() -> ListenTo {
-        ListenTo { click: false }
-    }
 }
 
 impl Tree {
@@ -56,14 +53,14 @@ impl Tree {
                 previous_sibling: Index::null(),
                 next_sibling: Index::null(),
             }],
-            listen: vec![ListenTo::new()],
+            emitter_config: vec![EmitterConfig::new()],
         }
     }
 
     pub fn with_capacity(capacity: usize) -> Tree {
         let mut nodes: Vec<Node> = Vec::with_capacity(capacity);
         let mut links: Vec<Link> = Vec::with_capacity(capacity);
-        let mut listen: Vec<ListenTo> = Vec::with_capacity(capacity);
+        let mut emitter_config: Vec<EmitterConfig> = Vec::with_capacity(capacity);
 
         let root = Node::Element {
             layout: Layout::Column {
@@ -81,13 +78,13 @@ impl Tree {
             previous_sibling: Index::null(),
             next_sibling: Index::null(),
         });
-        listen.push(ListenTo::new());
+        emitter_config.push(EmitterConfig::new());
 
         Tree {
             id: TreeId::new().unwrap(),
             nodes: nodes,
             links: links,
-            listen: listen,
+            emitter_config: emitter_config,
         }
     }
 
@@ -96,7 +93,12 @@ impl Tree {
         NodeRef::new(Index::zero(), self.id)
     }
 
-    pub fn create(&mut self, parent: NodeRef, node: Node, listen_to: ListenTo) -> NodeRef {
+    pub fn create(
+        &mut self,
+        parent: NodeRef,
+        node: Node,
+        emitter_config: EmitterConfig,
+    ) -> NodeRef {
         // FIXME: Add error messages.
         assert!(parent.tree_id() == self.id);
         assert!(!parent.index().is_null());
@@ -124,9 +126,18 @@ impl Tree {
             previous_sibling: last_child,
             next_sibling: Index::null(),
         });
-        self.listen.push(listen_to);
+        self.emitter_config.push(emitter_config);
 
         NodeRef::new(node_index, self.id)
+    }
+
+    pub fn update(&mut self, node_ref: NodeRef, node: Node, emitter_config: EmitterConfig) {
+        // FIXME: Add error messages.
+        assert!(node_ref.tree_id() == self.id);
+        assert!(!node_ref.index().is_null());
+
+        self.nodes[node_ref.value()] = node;
+        self.emitter_config[node_ref.value()] = emitter_config;
     }
 
     #[inline]
@@ -147,10 +158,10 @@ impl Tree {
     }
 
     #[inline]
-    pub fn get_listen(&self, node: NodeRef) -> &ListenTo {
+    pub fn get_emitter_config(&self, node: NodeRef) -> &EmitterConfig {
         assert!(self.id == node.tree_id());
 
-        &self.listen[node.value()]
+        &self.emitter_config[node.value()]
     }
 }
 

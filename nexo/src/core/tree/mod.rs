@@ -4,5 +4,5 @@ mod tree;
 mod tree_id;
 
 pub use node_ref::NodeRef;
-pub use tree::ListenTo;
+pub use tree::EmitterConfig;
 pub use tree::Tree;

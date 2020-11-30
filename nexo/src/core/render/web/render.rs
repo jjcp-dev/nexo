@@ -48,14 +48,14 @@ impl WebRenderer {
         parent: &HtmlElement,
     ) {
         let node = tree.get(node_ref);
-        let listen = tree.get_listen(node_ref);
+        let emitter_config = tree.get_emitter_config(node_ref);
 
         let tag = match node {
             Node::Text { content, style } => {
                 let p: HtmlElement = document.create_element("p").unwrap().dyn_into().unwrap();
 
                 self.set_style(&p, &style);
-                self.bind_event_callbacks(&events, &p, &listen);
+                self.bind_event_callbacks(&events, &p, &emitter_config);
                 p.set_inner_text(content);
 
                 p
@@ -85,7 +85,7 @@ impl WebRenderer {
                 div.set_class_name(&format!("{} {} {}", classes.0, classes.1, classes.2));
 
                 self.set_style(&div, &style);
-                self.bind_event_callbacks(&events, &div, &listen);
+                self.bind_event_callbacks(&events, &div, &emitter_config);
 
                 div
             }
@@ -193,9 +193,9 @@ impl WebRenderer {
         &self,
         events: &Rc<RefCell<Events>>,
         tag: &HtmlElement,
-        listen: &crate::core::tree::ListenTo,
+        emitter_config: &crate::core::tree::EmitterConfig,
     ) {
-        if listen.click {
+        if emitter_config.click {
             let events = events.clone();
             let event_listener = Box::new(move |event: web_sys::MouseEvent| {
                 events.borrow_mut().events.push(Event::Click {
