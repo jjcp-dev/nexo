@@ -11,15 +11,17 @@ static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
 use nexo::core::length::Length;
 use nexo::core::node::Node;
+use nexo::core::render::web::Closures;
 use nexo::core::render::web::WebRenderer;
 use nexo::core::style::*;
 use nexo::core::tree::{EmitterConfig, Tree};
 
+use std::rc::Rc;
 #[wasm_bindgen]
 pub struct NexoApp {
     tree: Tree,
     renderer: WebRenderer,
-    c: JsValue,
+    closures: Rc<Closures>,
 }
 
 #[wasm_bindgen]
@@ -28,35 +30,20 @@ impl NexoApp {
         NexoApp {
             tree: Tree::new(),
             renderer: WebRenderer::new(),
-            c: JsValue::null(),
+            closures: Rc::new(Closures::new(std::rc::Rc::new(
+                |event: nexo::core::event::Event| {
+                    web_sys::console::log(&js_sys::Array::of1(&wasm_bindgen::JsValue::from_str(
+                        &format!("{:?}", event),
+                    )));
+                },
+            ))),
         }
     }
 
-    pub fn hola(&self) {
-        // web_sys::console::log(&js_sys::Array::of1(&wasm_bindgen::JsValue::from_str(
-        //     "Hola!",
-        // )));
-    }
+    pub fn greet(&mut self) {
+        let root = self.tree.root();
 
-    pub fn set(&mut self, cb: JsValue) {
-        // self.c = cb;
-        cb.dyn_ref::<js_sys::Function>()
-            .unwrap()
-            .call0(&JsValue::null())
-            .unwrap();
-    }
-}
-
-#[wasm_bindgen]
-pub fn greet() {
-    let mut tree = Tree::new();
-    let mut events = nexo::core::render::web::Events {
-        events: std::vec::Vec::new(),
-    };
-    let renderer = WebRenderer::new();
-    let root = tree.root();
-
-    tree.create(
+        self.tree.create(
         root,
         Node::Text {
             content: "Hola<b>HOLA</b>".into(),
@@ -68,20 +55,21 @@ pub fn greet() {
         },
         EmitterConfig { click: true },
     );
-    tree.create(
-        root,
-        Node::Text {
-            content: "Hola<b>HOLA 2</b>".into(),
-            style: StyleBuilder::new()
-                .with_bg_color(Color::rgb(255, 0, 255))
-                // .with_margin(Margin::all(Length::Dots(30)))
-                // .with_padding(Padding::all(Length::Dots(10)))
-                .build(),
-        },
-        EmitterConfig { click: false },
-    );
+        self.tree.create(
+            root,
+            Node::Text {
+                content: "Hola<b>HOLA 2</b>".into(),
+                style: StyleBuilder::new()
+                    .with_bg_color(Color::rgb(255, 0, 255))
+                    // .with_margin(Margin::all(Length::Dots(30)))
+                    // .with_padding(Padding::all(Length::Dots(10)))
+                    .build(),
+            },
+            EmitterConfig { click: false },
+        );
 
-    renderer.render(&tree, std::rc::Rc::new(std::cell::RefCell::new(events)));
+        self.renderer.render(&self.tree, self.closures.clone());
+    }
 }
 
 /*

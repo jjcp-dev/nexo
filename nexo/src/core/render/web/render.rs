@@ -13,7 +13,7 @@ use crate::core::node::Node;
 use crate::core::style::{Color, Property, Style};
 use crate::core::tree::{NodeRef, Tree};
 
-use super::Events;
+use super::Closures;
 
 pub struct WebRenderer {
     root_element_id: String,
@@ -26,7 +26,7 @@ impl WebRenderer {
         }
     }
 
-    pub fn render(&self, tree: &Tree, events: Rc<RefCell<Events>>) {
+    pub fn render(&self, tree: &Tree, events: Rc<Closures>) {
         let window = web_sys::window().expect("Missing `window` object");
         let document = window.document().expect("Missing `document` on `window`");
 
@@ -42,7 +42,7 @@ impl WebRenderer {
     pub fn render_node(
         &self,
         tree: &Tree,
-        events: Rc<RefCell<Events>>,
+        events: Rc<Closures>,
         node_ref: NodeRef,
         document: &Document,
         parent: &HtmlElement,
@@ -115,7 +115,7 @@ impl WebRenderer {
     fn render_children(
         &self,
         tree: &Tree,
-        events: Rc<RefCell<Events>>,
+        events: Rc<Closures>,
         root: NodeRef,
         document: &Document,
         parent: &HtmlElement,
@@ -191,27 +191,12 @@ impl WebRenderer {
     #[inline]
     fn bind_event_callbacks(
         &self,
-        events: &Rc<RefCell<Events>>,
+        events: &Rc<Closures>,
         tag: &HtmlElement,
         emitter_config: &crate::core::tree::EmitterConfig,
     ) {
         if emitter_config.click {
-            let events = events.clone();
-            let event_listener = Box::new(move |event: web_sys::MouseEvent| {
-                events.borrow_mut().events.push(Event::Click {
-                    x: event.x() as i16,
-                    y: event.y() as i16,
-                });
-                for i in events.borrow().events.iter() {
-                    web_sys::console::log(&js_sys::Array::of1(&wasm_bindgen::JsValue::from_str(
-                        &format!("{:?}", i),
-                    )));
-                }
-            });
-
-            let callback = Closure::wrap(event_listener as Box<dyn FnMut(web_sys::MouseEvent)>);
-            tag.set_onmousedown(Some(callback.as_ref().unchecked_ref()));
-            callback.forget();
+            tag.set_onmousedown(Some(events.on_click_handler.as_ref().unchecked_ref()));
         }
     }
 }
