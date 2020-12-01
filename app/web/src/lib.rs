@@ -50,7 +50,7 @@ impl NexoApp {
             style: StyleBuilder::new()
                 .with_margin(Margin::all(Length::Dots(30)))
                 .with_padding(Padding::all(Length::Dots(200)))
-                .with_bg_image("https://image.shutterstock.com/image-vector/abstract-futuristic-landscape-1980s-style-260nw-1139046833.jpg".into())
+                .with_bg_image("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmKpHnYnWqm9eSqOmfvXU-foLEig2lsw7l3w&usqp=CAU".into())
                 .build(),
         },
         EmitterConfig { click: true },
