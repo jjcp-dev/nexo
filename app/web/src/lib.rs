@@ -73,19 +73,15 @@ impl NexoApp {
 }
 
 /*
+   struct MyApp;
+   impl CoreApp for MyApp {
+       fn startup(&mut self) -> Result<(), Self::Error>;
 
-struct MyApp {
+       fn on_event(&mut self, tree: &mut Tree, event: Event);
+   }
 
-}
-impl Application for MyApp    {
-    fn on_event(&mut self, ) {
-
-    }
-}
-
-  let app = BaseApplication::new();
-
-  app.get_tree()
-
-
- */
+   fn start() {
+       let app = CoreLoop::new(MyApp {});
+       app.run();
+   }
+*/
